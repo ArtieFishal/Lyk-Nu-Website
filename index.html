@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lyk-Nu Auto Collision & Service Center | La Follette, TN</title>
+  <meta name="description" content="Lyk-Nu Auto Collision & Service Center — Expert auto body repair, painting, and mechanical service in La Follette, Tennessee. Serving Jacksboro and surrounding areas.">
+  <meta name="keywords" content="auto body repair La Follette TN, collision repair Jacksboro TN, car paint shop La Follette, mechanic Jacksboro Tennessee, auto painting 37766">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e63946;
+      --primary-dark: #b71c2c;
+      --dark: #1a1a2e;
+      --darker: #0f0f1a;
+      --light: #f8f9fa;
+      --gray: #a0a0b0;
+      --accent: #ff6b35;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--darker);
+      color: var(--light);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(15, 15, 26, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Russo One', sans-serif;
+      font-size: 1.4rem;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+    .nav-logo span { color: var(--light); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--light); }
+    .nav-cta {
+      background: var(--primary);
+      color: white !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--primary-dark); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1a0a0f 100%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(230,57,70,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(255,107,53,0.05) 0%, transparent 50%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(230,57,70,0.15);
+      color: var(--primary);
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(230,57,70,0.25);
+    }
+    .hero h1 {
+      font-family: 'Russo One', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 .highlight { color: var(--primary); }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--gray);
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(230,57,70,0.3); }
+    .btn-outline {
+      background: transparent;
+      color: var(--light);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* SERVICES */
+    .services {
+      padding: 6rem 2rem;
+      background: var(--dark);
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .section-header h2 {
+      font-family: 'Russo One', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      margin-bottom: 0.8rem;
+    }
+    .section-header p { color: var(--gray); font-size: 1.05rem; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      transition: all 0.3s;
+    }
+    .service-card:hover {
+      border-color: rgba(230,57,70,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .service-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(230,57,70,0.12);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .service-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .service-card p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* GALLERY */
+    .gallery {
+      padding: 6rem 2rem;
+      background: var(--dark);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .gallery-item:hover {
+      border-color: rgba(230,57,70,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery-item.featured {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    /* ABOUT */
+    .about {
+      padding: 6rem 2rem;
+      background: var(--darker);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    .about-text h2 {
+      font-family: 'Russo One', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      margin-bottom: 1.2rem;
+    }
+    .about-text p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'Russo One', sans-serif;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 0.3rem;
+    }
+    .about-image {
+      background: linear-gradient(135deg, rgba(230,57,70,0.1), rgba(255,107,53,0.05));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image::after {
+      content: '🔧';
+      font-size: 6rem;
+      opacity: 0.3;
+    }
+
+    /* WHY US */
+    .why-us {
+      padding: 6rem 2rem;
+      background: var(--dark);
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .why-item {
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    .why-item .icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .why-item h3 { font-weight: 700; margin-bottom: 0.5rem; }
+    .why-item p { color: var(--gray); font-size: 0.9rem; }
+
+    /* CONTACT */
+    .contact {
+      padding: 6rem 2rem;
+      background: var(--darker);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .contact-info h2 {
+      font-family: 'Russo One', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      margin-bottom: 1rem;
+    }
+    .contact-info > p { color: var(--gray); margin-bottom: 2rem; }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .contact-detail .icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(230,57,70,0.12);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .contact-detail .text h4 { font-weight: 600; margin-bottom: 0.2rem; }
+    .contact-detail .text p, .contact-detail .text a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .contact-detail .text a:hover { color: var(--primary); }
+    .map-container {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-top: 1.5rem;
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 250px;
+      border: none;
+      filter: grayscale(30%) invert(92%) hue-rotate(180deg);
+    }
+    .contact-form {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+    .contact-form h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--gray);
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--light);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-submit {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-submit:hover { background: var(--primary-dark); }
+
+    /* FOOTER */
+    footer {
+      background: var(--darker);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem;
+      text-align: center;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .nav-links { display: none; }
+      .about-image { height: 250px; }
+    }
+
+    /* SCROLL ANIMATIONS */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">LYK-NU<span>.</span></a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="tel:+14235551234" class="nav-cta">📞 Call Now</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">La Follette, Tennessee</div>
+      <h1>Auto Collision Repair <span class="highlight">&amp; Service</span> You Can Trust</h1>
+      <p>Expert auto body work, professional painting, and reliable mechanical service for drivers throughout Jacksboro, La Follette, and surrounding areas.</p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-primary">Get a Free Estimate</a>
+        <a href="tel:+14235551234" class="btn btn-outline">📞 Call Us Today</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-header fade-in">
+      <h2>What We Do</h2>
+      <p>Full-service auto body and mechanical repair under one roof</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-in">
+        <div class="service-icon">💥</div>
+        <h3>Collision Repair</h3>
+        <p>From fender benders to major accidents, we restore your vehicle to pre-accident condition with precision and care.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon">🎨</div>
+        <h3>Auto Painting</h3>
+        <p>Professional paint matching and refinishing. We use quality materials for a factory-finish look that lasts.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon">🔧</div>
+        <h3>Mechanical Service</h3>
+        <p>General mechanical repairs and maintenance — brakes, suspension, engine work, and more to keep you on the road.</p>
+      </div>
+      <div class="service-card fade-in">
+        <div class="service-icon">🛡️</div>
+        <h3>Insurance Claims</h3>
+        <p>We work with all major insurance companies to make the claims process as smooth and stress-free as possible.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="section-header fade-in">
+      <h2>Our Work</h2>
+      <p>See what we do best</p>
+    </div>
+    <div class="gallery-grid fade-in">
+      <div class="gallery-item featured">
+        <img src="images/photo1.jpg" alt="Photo 1 — Featured" />
+      </div>
+      <div class="gallery-item">
+        <img src="images/photo2.jpg" alt="Photo 2" />
+      </div>
+      <div class="gallery-item">
+        <img src="images/photo3.jpg" alt="Photo 3" />
+      </div>
+      <div class="gallery-item">
+        <img src="images/photo4.jpg" alt="Photo 4" />
+      </div>
+      <div class="gallery-item">
+        <img src="images/photo5.jpg" alt="Photo 5" />
+      </div>
+      <div class="gallery-item">
+        <img src="images/photo6.jpg" alt="Photo 6" />
+      </div>
+      <div class="gallery-item">
+        <img src="images/photo7.jpg" alt="Photo 7" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <h2>Serving <span style="color:var(--primary);">Campbell County</span> for Years</h2>
+        <p>Lyk-Nu Auto Collision & Service Center has been a trusted name in La Follette, TN. We take pride in honest work, fair prices, and getting your vehicle back on the road quickly.</p>
+        <p>Whether you've been in an accident, need a fresh paint job, or your car just needs some mechanical attention — we've got you covered. No job too big or too small.</p>
+        <div class="about-stats">
+          <div class="stat">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Years in Business</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">1,000+</div>
+            <div class="stat-label">Cars Repaired</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">5★</div>
+            <div class="stat-label">Customer Rating</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">Fast</div>
+            <div class="stat-label">Turnaround</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-image fade-in">
+        <!-- Placeholder for shop photo -->
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="why-us">
+    <div class="section-header fade-in">
+      <h2>Why Choose Lyk-Nu</h2>
+      <p>What sets us apart from the rest</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-item fade-in">
+        <div class="icon">✅</div>
+        <h3>Quality Work</h3>
+        <p>We don't cut corners. Every repair meets our high standards — and yours.</p>
+      </div>
+      <div class="why-item fade-in">
+        <div class="icon">💰</div>
+        <h3>Fair Pricing</h3>
+        <p>Transparent quotes with no hidden fees. You'll know the cost upfront.</p>
+      </div>
+      <div class="why-item fade-in">
+        <div class="icon">⚡</div>
+        <h3>Quick Turnaround</h3>
+        <p>We know you need your vehicle back. We work efficiently without sacrificing quality.</p>
+      </div>
+      <div class="why-item fade-in">
+        <div class="icon">🤝</div>
+        <h3>Honest Service</h3>
+        <p>We'll only recommend what your vehicle actually needs. No upselling, no pressure.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-grid">
+      <div class="contact-info fade-in">
+        <h2>Get In <span style="color:var(--primary);">Touch</span></h2>
+        <p>Ready to get your vehicle fixed? Stop by the shop or send us a message.</p>
+        <div class="contact-detail">
+          <div class="icon">📍</div>
+          <div class="text">
+            <h4>Location</h4>
+            <p>1534 Old Jacksboro Hwy<br>La Follette, TN 37766</p>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="icon">📞</div>
+          <div class="text">
+            <h4>Phone</h4>
+            <a href="tel:+14235551234">(423) 555-1234</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="icon">🕐</div>
+          <div class="text">
+            <h4>Hours</h4>
+            <p>Monday – Friday: 8:00 AM – 5:00 PM<br>Saturday: By Appointment<br>Sunday: Closed</p>
+          </div>
+        </div>
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3228.12345678!2d-84.123456!3d36.345678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzYzMDA!5e0!3m2!1sen!2sus!4v1234567890" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+      <div class="contact-form fade-in">
+        <h3>Request a Free Estimate</h3>
+        <form onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" placeholder="John Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="(423) 555-0000" required>
+          </div>
+          <div class="form-group">
+            <label for="service">Service Needed</label>
+            <input type="text" id="service" placeholder="Collision repair, painting, mechanical...">
+          </div>
+          <div class="form-group">
+            <label for="message">Tell Us About Your Vehicle</label>
+            <textarea id="message" placeholder="Year, make, model, and what needs work..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Request →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 Lyk-Nu Auto Collision & Service Center. All rights reserved. | <a href="#">Privacy</a></p>
+  </footer>
+
+  <script>
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Form handler
+    function handleSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const service = document.getElementById('service').value;
+      const message = document.getElementById('message').value;
+      const body = `Hi, I'm ${name}.%0A%0APhone: ${phone}%0AService needed: ${service}%0A%0A${message}`;
+      window.location.href = `mailto:info@lyknu.com?subject=Estimate Request from ${name}&body=${body}`;
+    }
+  </script>
+</body>
+</html>
