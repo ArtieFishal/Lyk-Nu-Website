@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+# Netlify local dev state (includes local Blobs: test bookings, demo appointments, uploaded photos)
+.netlify/
+deno.lock
+# build output (Netlify rebuilds it from src/ on every deploy)
+public/
+# secrets / local env
+.env
+.env.*
+# local QA screenshots (contain demo appointment data)
+screenshots/
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+{{> head}}
+<title>Schedule a Free Estimate | {{name}}</title>
+<meta name="description" content="Book a free collision or auto body estimate online at {{name}} in LaFollette, TN. Pick an open time that works for you.">
+{{CANONICAL}}
+<meta property="og:title" content="Schedule a Free Estimate — {{name}}">
+<meta property="og:image" content="{{ABS}}/assets/img/og-image.jpg">
+</head>
+<body>
+{{> header}}
+<main id="main">
+  <div class="page-hero">
+    <div class="container">
+      <span class="eyebrow" style="color:#ff6b70">Free estimates</span>
+      <h1 style="font-size:clamp(2.2rem,6vw,3.6rem)">Schedule your estimate</h1>
+      <p>Choose an open day and time, tell us about your vehicle, and we'll see you at {{address.street}}. Prefer to talk? Call <a href="tel:{{phoneE164}}" style="color:#fff;font-weight:700">{{phone}}</a>.</p>
+    </div>
+  </div>
+  <div class="container">
+    <div id="booking-root" class="book-wrap">
+      <div>
+        <div class="panel" id="step-date">
+          <h2><span class="num">1</span> Pick a day</h2>
+          <div id="booking-message" class="notice" hidden></div>
+          <div class="cal-head">
+            <strong id="cal-title">Loading…</strong>
+            <div class="cal-nav"><button type="button" id="cal-prev" aria-label="Previous month">‹</button><button type="button" id="cal-next" aria-label="Next month">›</button></div>
+          </div>
+          <div class="cal" id="cal" role="grid" aria-label="Available dates"></div>
+          <div class="legend"><span><i style="background:#effaf4;border:1px solid #b9e3cf"></i>Open</span><span><i style="background:#f6f7f8;border:1px solid #e5e7ea"></i>Unavailable</span></div>
+        </div>
+        <div class="panel" id="step-time">
+          <h2><span class="num">2</span> Pick a time</h2>
+          <p class="muted" id="slot-hint">Select a day above to see open times.</p>
+          <div class="slots" id="slots" role="listbox" aria-label="Available times"></div>
+        </div>
+        <form class="panel" id="book-form" novalidate>
+          <h2><span class="num">3</span> Your details</h2>
+          <div class="form-grid">
+            <div class="f"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required><div class="err"></div></div>
+            <div class="f"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required><div class="err"></div></div>
+            <div class="f full"><label for="email">Email <span class="opt">(optional)</span></label><input id="email" name="email" type="email" autocomplete="email"><div class="err"></div></div>
+            <div class="three">
+              <div class="f"><label for="vehicleYear">Year</label><input id="vehicleYear" name="vehicleYear" inputmode="numeric" maxlength="4" placeholder="2019" required><div class="err"></div></div>
+              <div class="f"><label for="vehicleMake">Make</label><input id="vehicleMake" name="vehicleMake" placeholder="Ford" required><div class="err"></div></div>
+              <div class="f"><label for="vehicleModel">Model</label><input id="vehicleModel" name="vehicleModel" placeholder="F-150" required><div class="err"></div></div>
+            </div>
+            <div class="f full"><label for="insurance">Insurance company <span class="opt">(optional — if filing a claim)</span></label><input id="insurance" name="insurance"><div class="err"></div></div>
+            <div class="f full"><label for="description">What happened? Describe the damage or problem</label><textarea id="description" name="description" required placeholder="e.g. Rear-ended at a stop light. Rear bumper pushed in, trunk won't close."></textarea><div class="err"></div></div>
+            <div class="f full">
+              <label>Photos of the damage <span class="opt">(optional, up to 4)</span></label>
+              <label class="drop" for="photos">{{i:camera}}<br><strong>Tap to add photos</strong><br><span class="muted">They help us prepare for your visit</span></label>
+              <input id="photos" type="file" accept="image/*" multiple hidden>
+              <div class="thumbs" id="thumbs"></div>
+              <div class="err" id="photos-err"></div>
+            </div>
+            <div class="hp" aria-hidden="true"><label>Company <input name="company" tabindex="-1" autocomplete="off"></label></div>
+          </div>
+          <div id="form-alert" class="alert error" hidden role="alert"></div>
+        </form>
+      </div>
+      <aside class="panel summary" aria-live="polite">
+        <h2 style="font-size:1.5rem">Your appointment</h2>
+        <dl>
+          <dt>Date</dt><dd id="sum-date">—</dd>
+          <dt>Time</dt><dd id="sum-time">—</dd>
+          <dt>Where</dt><dd>{{address.street}}, {{address.displayCity}}</dd>
+        </dl>
+        <button class="btn btn-red" id="submit-btn" form="book-form" type="submit" style="width:100%" disabled>Book My Estimate</button>
+        <p class="muted" style="font-size:.88rem;margin-top:.9rem">Estimates are free. Need to change your time? Call {{phone}}.</p>
+      </aside>
+    </div>
+    <div id="confirm" class="panel confirm" hidden style="margin:2.5rem auto 4rem;max-width:640px">
+      <div class="check">{{i:checkbig}}</div>
+      <h2>You're booked!</h2>
+      <p style="font-size:1.15rem" id="confirm-when"></p>
+      <p class="muted">Confirmation # <strong id="confirm-id"></strong></p>
+      <p>We'll see you at <strong>{{address.street}}, {{address.displayCity}}, {{address.state}}</strong>. If something comes up, please call <a href="tel:{{phoneE164}}">{{phone}}</a>.</p>
+      <p><a class="btn btn-outline" href="/">Back to home</a></p>
+    </div>
+  </div>
+</main>
+{{> footer}}
+<script src="/js/book.js?v={{BUILD}}" defer></script>
+</body>
+</html>

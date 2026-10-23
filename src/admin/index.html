@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+{{> head}}
+<title>Shop Admin | {{shortName}}</title>
+<meta name="robots" content="noindex, nofollow">
+</head>
+<body class="admin-body">
+<div class="admin-top">
+  <div class="container">
+    <a class="brand" href="/"><img class="brand-mark" src="/assets/logo-mark.svg" alt="" width="40" height="40"><span class="brand-text"><span class="brand-name">LYK<span>-</span>NU</span><span class="brand-sub">Shop Admin</span></span></a>
+    <button class="btn btn-ghost" id="logout" hidden style="padding:.5rem 1rem">Log out</button>
+  </div>
+</div>
+
+<main class="container" id="main">
+  <form class="panel login-box" id="login-form">
+    <h2>Owner login</h2>
+    <div class="f"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
+    <div id="login-err" class="alert error" hidden></div>
+    <button class="btn btn-red" style="width:100%;margin-top:1rem" type="submit">Log in</button>
+  </form>
+
+  <div id="app" hidden>
+    <div class="tabs" role="tablist">
+      <button class="active" data-tab="appts">Appointments</button>
+      <button data-tab="blocks">Time off / Block times</button>
+      <button data-tab="hours">Hours &amp; settings</button>
+    </div>
+
+    <section class="tab active" id="tab-appts" style="padding:0 0 3rem">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <h2 style="margin:0">Upcoming estimates</h2>
+        <label class="toggle"><input type="checkbox" id="show-canceled"> Show canceled</label>
+      </div>
+      <div id="appts"></div>
+    </section>
+
+    <section class="tab" id="tab-blocks" style="padding:0 0 3rem">
+      <div class="panel">
+        <h2>Block off time</h2>
+        <p class="muted">Days or hours you won't be at the shop. Customers can't book these times. Takes effect immediately.</p>
+        <form id="block-form">
+          <div class="row">
+            <div class="f"><label for="b-start">From date</label><input type="date" id="b-start" required></div>
+            <div class="f"><label for="b-end">To date <span class="opt">(same day if blank)</span></label><input type="date" id="b-end"></div>
+          </div>
+          <label class="toggle" style="margin:1rem 0"><input type="checkbox" id="b-allday" checked> All day</label>
+          <div class="row" id="b-times" hidden>
+            <div class="f"><label for="b-st">From time</label><input type="time" id="b-st" value="12:00"></div>
+            <div class="f"><label for="b-et">To time</label><input type="time" id="b-et" value="17:00"></div>
+          </div>
+          <div class="row" style="margin-top:1rem">
+            <div class="f"><label for="b-reason">Note <span class="opt">(only you see this)</span></label><input id="b-reason" placeholder="Vacation, appointment, etc."></div>
+            <button class="btn btn-red" type="submit">Block this time</button>
+          </div>
+          <div class="row" style="margin-top:.8rem;gap:.5rem">
+            <button type="button" class="btn btn-outline" data-quick="today">Block rest of today</button>
+            <button type="button" class="btn btn-outline" data-quick="tomorrow">Block tomorrow</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel">
+        <h2>Blocked times</h2>
+        <div id="blocks"></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-hours" style="padding:0 0 3rem">
+      <form class="panel" id="settings-form">
+        <h2>Weekly estimate hours</h2>
+        <p class="muted">When customers can book estimates each week. Uncheck a day to close it.</p>
+        <table class="hours-edit">
+          <thead><tr><th>Day</th><th>Open?</th><th>Start</th><th>End</th><th>Break from</th><th>Break to</th></tr></thead>
+          <tbody id="hours-body"></tbody>
+        </table>
+        <h2 style="margin-top:2rem">Booking rules</h2>
+        <div class="row">
+          <div class="f"><label for="s-slot">Estimate length (minutes)</label><select id="s-slot"><option>15</option><option>20</option><option>30</option><option>45</option><option>60</option><option>90</option><option>120</option></select></div>
+          <div class="f"><label for="s-cap">Estimates at the same time</label><input id="s-cap" type="number" min="1" max="20"></div>
+          <div class="f"><label for="s-notice">Minimum notice (hours)</label><input id="s-notice" type="number" min="0" max="168"></div>
+          <div class="f"><label for="s-ahead">Book up to (days ahead)</label><input id="s-ahead" type="number" min="1" max="365"></div>
+        </div>
+        <div class="f" style="margin-top:1rem"><label for="s-msg">Notice on booking page <span class="opt">(optional)</span></label><input id="s-msg" maxlength="500" placeholder="e.g. We're closed the week of July 4th."></div>
+        <div style="margin-top:1.4rem;display:flex;gap:.6rem;flex-wrap:wrap"><button class="btn btn-red" type="submit">Save settings</button></div>
+        <p class="muted" style="margin-top:1rem;font-size:.9rem">Times are shop time (<span id="tz"></span>). Changing the estimate length doesn't move existing appointments.</p>
+      </form>
+    </section>
+  </div>
+</main>
+<script src="/js/admin.js?v={{BUILD}}" defer></script>
+</body>
+</html>

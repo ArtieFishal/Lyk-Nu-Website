@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+{{> head}}
+<title>{{name}} | Collision Repair, Paint & Towing in LaFollette, TN</title>
+<meta name="description" content="Family-owned since {{foundedYear}}. Collision repair, auto body & paint, mechanical service and towing in LaFollette, TN. Book a free estimate online or call {{phone}}.">
+{{CANONICAL}}
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{name}} — LaFollette, TN">
+<meta property="og:description" content="Collision repair, auto body & paint, mechanical service and towing. Family owned since {{foundedYear}}. Book a free estimate online.">
+<meta property="og:image" content="{{ABS}}/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" as="image" href="/assets/img/hero-shop.webp" imagesrcset="/assets/img/hero-shop-sm.webp 960w, /assets/img/hero-shop.webp 1920w" imagesizes="100vw">
+{{JSONLD}}
+</head>
+<body>
+{{> header}}
+<main id="main">
+  <section class="hero" aria-label="Introduction">
+    <img class="hero-bg" src="/assets/img/hero-shop.webp" srcset="/assets/img/hero-shop-sm.webp 960w, /assets/img/hero-shop.webp 1920w" sizes="100vw" alt="Freshly painted candy-red lifted Ford Excursion inside the Lyk-Nu shop" fetchpriority="high" width="1920" height="1000">
+    <div class="container">
+      <div class="hero-inner">
+        <span class="eyebrow" style="color:#ff6b70">Family owned &amp; operated since {{foundedYear}}</span>
+        <h1>Back on the road<br>like it never happened.</h1>
+        <p class="lead">Collision repair, auto body &amp; paint, mechanical service and towing for passenger and commercial vehicles — right here in {{address.displayCity}}, Tennessee.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-red" href="/book/">{{i:cal}} Schedule a Free Estimate</a>
+          <a class="btn btn-ghost" href="tel:{{phoneE164}}">{{i:phone}} Call {{phone}}</a>
+        </div>
+        <div class="hero-badges">
+          <div><strong>{{YEARS}}+</strong>years serving Campbell County</div>
+          {{HERO_RATING}}
+          <div><strong>Mon–Fri</strong>8:00 AM – 5:00 PM</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="stripe" aria-hidden="true"></div>
+
+  <section id="services" class="bg-light">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">What we do</span>
+        <h2>Complete collision &amp; auto service</h2>
+        <p>From a crumpled fender to a full repaint, a check-engine light to a tow off the interstate — one local shop handles it all.</p>
+      </div>
+      <div class="services-grid">
+        <article class="service">
+          <img src="/assets/img/collision-damage-sm.webp" alt="Red and silver Chevy pickup with its front end torn down for collision repair in the Lyk-Nu shop" loading="lazy" width="600" height="400">
+          <div class="body"><h3>Collision Repair</h3><p>Professional, reliable collision repair for all passenger and commercial vehicles. We restore your vehicle to pre-accident condition.</p></div>
+        </article>
+        <article class="service">
+          <img src="/assets/img/body-paint-work-sm.webp" alt="Red and silver Chevy pickup after body and paint work by Lyk-Nu" loading="lazy" width="600" height="400">
+          <div class="body"><h3>Auto Body &amp; Paint</h3><p>Body and fender work, straightening, and refinishing — dents, scratches and panels repaired and painted to match.</p></div>
+        </article>
+        <article class="service">
+          <img src="/assets/img/mechanical-repair-sm.webp" alt="Mechanic working in an engine bay" loading="lazy" width="600" height="400">
+          <div class="body"><h3>Mechanical Repair</h3><p>Computer diagnostics, brakes, A/C, shocks and front-end alignment. Honest diagnosis and fair pricing.</p></div>
+        </article>
+        <article class="service">
+          <img src="/assets/img/towing-flatbed-sm.webp" alt="Lyk-Nu rollback tow truck" loading="lazy" width="600" height="400">
+          <div class="body"><h3>Towing &amp; Road Service</h3><p>Light-duty and rollback towing, local and long distance, plus lockouts and jump starts when you're stranded.</p></div>
+        </article>
+        <article class="service no-img">
+          <div class="body">
+            <div class="icon">{{i:shield}}</div>
+            <h3>Insurance Claims</h3><p>{{insuranceNote}}</p>{{INSURANCE}}
+          </div>
+        </article>
+        <article class="service no-img">
+          <div class="body">
+            <div class="icon">{{i:glass}}</div>
+            <h3>Auto Glass &amp; Windshields</h3><p>Cracked or broken windshield or window glass? Ask us about replacement when you bring your vehicle in.</p>
+          </div>
+        </article>
+      </div>
+      <div class="chips" aria-label="More services">
+        <span class="chip">Frame straightening</span><span class="chip">Front-end alignment</span><span class="chip">A/C service</span><span class="chip">Brakes</span><span class="chip">Shocks &amp; struts</span><span class="chip">Lockout service</span><span class="chip">Vehicle storage</span><span class="chip">Commercial vehicles</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container about-grid">
+      <div class="about-media">
+        <img src="/assets/img/shop-floor.webp" srcset="/assets/img/shop-floor-sm.webp 600w, /assets/img/shop-floor.webp 1200w" sizes="(min-width:900px) 50vw, 100vw" alt="Inside the Lyk-Nu shop: a pickup in for repair on the wide shop floor" loading="lazy" width="1200" height="800">
+        <div class="about-badge"><strong>{{foundedYear}}</strong><span>Est. in LaFollette</span></div>
+      </div>
+      <div>
+        <span class="eyebrow">About Lyk-Nu</span>
+        <h2>A family shop your neighbors trust</h2>
+        <p>{{legalName}} has been family owned and operated since {{foundedYear}}. We offer professional and reliable collision repair for all passenger and commercial vehicles, and we're experts at restoring your vehicle to pre-accident condition.</p>
+        <p>Whether you've been in a wreck, need paint and body work, have a mechanical problem, or need a tow, our team treats you — and your vehicle — like family.</p>
+        <ul class="checks">
+          <li>{{i:check}}<span><strong>Honest, fair pricing</strong> — customers say it again and again.</span></li>
+          <li>{{i:check}}<span><strong>Fast towing response</strong> when you're stuck on the road.</span></li>
+          <li>{{i:check}}<span><strong>Body, paint, mechanical &amp; towing</strong> under one roof.</span></li>
+          <li>{{i:check}}<span><strong>Insurance claims</strong> handled for you.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="bg-light">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Our Work</span>
+        <h2>Real vehicles. Real results.</h2>
+        <p>Every photo here was taken at the Lyk-Nu shop. Tap any photo to see it larger.</p>
+      </div>
+      <div class="before-after">
+        <figure class="g-item ba-before"><a href="/assets/img/gallery/shop-2.webp" data-lightbox="work" data-caption="Before: red and silver Chevy pickup torn down and masked for paint in the shop"><img src="/assets/img/gallery/shop-2-sm.webp" alt="Before: red and silver Chevy pickup torn down and masked for paint in the shop" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Before — torn down &amp; masked</figcaption></figure>
+        <figure class="g-item ba-after"><a href="/assets/img/gallery/shop-1.webp" data-lightbox="work" data-caption="After: the same red and silver Chevy pickup finished and parked outside"><img src="/assets/img/gallery/shop-1-sm.webp" alt="After: the same red and silver Chevy pickup finished and parked outside" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>After — back on the road</figcaption></figure>
+      </div>
+      <div class="gallery-grid">
+        <figure class="g-item"><a href="/assets/img/gallery/shop-5.webp" data-lightbox="work" data-caption="Candy-red lifted Ford Excursion, finished and washed, in the shop bay"><img src="/assets/img/gallery/shop-5-sm.webp" alt="Candy-red lifted Ford Excursion, finished and washed, in the shop bay" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Candy-red Ford Excursion</figcaption></figure>
+        <figure class="g-item"><a href="/assets/img/gallery/shop-4.webp" data-lightbox="work" data-caption="Red and silver Chevy pickup on the shop floor during repair"><img src="/assets/img/gallery/shop-4-sm.webp" alt="Red and silver Chevy pickup on the shop floor during repair" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>On the shop floor</figcaption></figure>
+        <figure class="g-item"><a href="/assets/img/gallery/shop-3.webp" data-lightbox="work" data-caption="Finished red and silver Chevy pickup, front three-quarter view"><img src="/assets/img/gallery/shop-3-sm.webp" alt="Finished red and silver Chevy pickup, front three-quarter view" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Two-tone Chevy, finished</figcaption></figure>
+        <figure class="g-item"><a href="/assets/img/gallery/shop-6.webp" data-lightbox="work" data-caption="Lyk-Nu rollback tow truck parked on the roadside"><img src="/assets/img/gallery/shop-6-sm.webp" alt="Lyk-Nu rollback tow truck parked on the roadside" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Our rollback</figcaption></figure>
+        <figure class="g-item"><a href="/assets/img/gallery/shop-7.webp" data-lightbox="work" data-caption="Lyk-Nu wrecker tow truck in front of the shop"><img src="/assets/img/gallery/shop-7-sm.webp" alt="Lyk-Nu wrecker tow truck in front of the shop" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Our wrecker at the shop</figcaption></figure>
+      </div>
+      <p class="work-cta"><a class="btn btn-red" href="/book/">{{i:cal}} Get your free estimate</a></p>
+    </div>
+  </section>
+
+
+  <section class="bg-dark">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">How it works</span>
+        <h2 style="color:#fff">Getting an estimate is easy</h2>
+        <p>Pick a time online — it takes about two minutes.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Pick a time</h3><p>Choose an open day and time that fits your schedule.</p></div>
+        <div class="step"><h3>Tell us about it</h3><p>Your vehicle, what happened, and a few photos if you have them.</p></div>
+        <div class="step"><h3>Bring it by</h3><p>We'll look it over and walk you through the repair and your options.</p></div>
+        <div class="step"><h3>Drive away happy</h3><p>Quality work, done right, at a fair price.</p></div>
+      </div>
+      <p style="margin-top:2rem"><a class="btn btn-red" href="/book/">{{i:cal}} See open times</a></p>
+    </div>
+  </section>
+
+  <section id="reviews" class="bg-light">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Reviews</span>
+        <h2>What customers are saying</h2>
+      </div>
+      {{RATING}}
+      <div class="reviews">
+        {{REVIEWS}}
+      </div>
+      <p class="review-note">Excerpts from public customer reviews. {{REVIEW_LINK}}</p>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <div class="container">
+      <div><h2>Been in an accident?</h2><p>Book a free estimate online, or call us now — we're here to help.</p></div>
+      <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+        <a class="btn btn-light" href="/book/">Book Online</a>
+        <a class="btn btn-ghost" href="tel:{{phoneE164}}">{{phone}}</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="contact">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Contact</span>
+        <h2>Visit the shop</h2>
+        <p>Proudly serving {{SERVICE_AREA}}.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <dl>
+            <div><dt>Address</dt><dd><a href="{{DIRECTIONS}}" target="_blank" rel="noopener">{{address.street}}<br>{{address.displayCity}}, {{address.state}} {{address.zip}}</a></dd></div>
+            <div><dt>Phone</dt><dd><a href="tel:{{phoneE164}}">{{phone}}</a></dd></div>
+            {{EMAIL_DD}}
+            <div><dt>Hours</dt><dd>{{HOURS_TABLE}}</dd></div>
+            {{TOWING_NOTE}}
+          </dl>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.4rem">
+            <a class="btn btn-red" href="/book/">Book an Estimate</a>
+            <a class="btn btn-outline" href="{{DIRECTIONS}}" target="_blank" rel="noopener">Get Directions</a>
+          </div>
+        </div>
+        <div class="map">
+          <iframe title="Map to {{name}}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="{{MAP_SRC}}"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{{> footer}}
+</body>
+</html>

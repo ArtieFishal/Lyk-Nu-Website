@@ -1,0 +1,93 @@
+{
+  "_README": "Edit this ONE file to change business facts shown on the website, then redeploy. Any value starting with 'TODO' is a placeholder that could not be verified online; the build prints a warning for each. Leave a value as an empty string or [] to hide that item. Booking hours are NOT set here; the owner sets them on the /admin page.",
+
+  "name": "Lyk-Nu Auto Collision & Service Center",
+  "legalName": "Lyk-Nu Auto Collision & Service Center, Inc.",
+  "shortName": "Lyk-Nu",
+  "tagline": "Collision repair, paint, mechanical service & towing in LaFollette, TN",
+  "foundedYear": 1968,
+  "familyOwned": true,
+  "owner": "Mike Freeman",
+
+  "phone": "(423) 562-5156",
+  "phoneE164": "+14235625156",
+  "fax": "(423) 562-3369",
+  "email": "freeman-mike@lyknu.com",
+
+  "address": {
+    "street": "1534 Old Jacksboro Hwy",
+    "city": "La Follette",
+    "displayCity": "LaFollette",
+    "state": "TN",
+    "zip": "37766",
+    "country": "US"
+  },
+  "geo": { "lat": 36.360966, "lng": -84.142533 },
+  "serviceArea": ["LaFollette", "Jacksboro", "Caryville", "Jellico", "Campbell County"],
+
+  "hoursDisplay": [
+    { "days": "Monday – Friday", "hours": "8:00 AM – 5:00 PM" },
+    { "days": "Saturday – Sunday", "hours": "Closed" }
+  ],
+  "hoursSchema": ["Mo-Fr 08:00-17:00"],
+  "towingNote": "TODO: confirm towing / roadside availability outside business hours (e.g. 24/7?) — leave empty to hide",
+
+  "social": {
+    "facebook": "https://www.facebook.com/310492218940",
+    "google": "https://www.google.com/maps/search/?api=1&query=Lyk-Nu+Auto+Collision+1534+Old+Jacksboro+Hwy+La+Follette+TN+37766",
+    "yelp": "https://www.yelp.com/biz/lyk-nu-auto-collision-and-service-center-la-follette"
+  },
+
+  "rating": {
+    "value": 4.5,
+    "count": 93,
+    "source": "Google",
+    "asOf": "October 2026",
+    "show": true
+  },
+
+  "insurancePartners": [],
+  "insuranceNote": "We handle insurance claims work. Bring your claim number and we will help you through the process.",
+  "certifications": [],
+
+  "usdot": "624512",
+
+  "reviews": [
+    {
+      "text": "They are honest, trustworthy and their prices left me eternally grateful. My son was in town and his car broke down. They were there so fast, I have never in my life seen a tow truck with such a rapid response... They did a great job and had his car running by the very next day.",
+      "author": "Google reviewer",
+      "date": "February 2026",
+      "rating": 5
+    },
+    {
+      "text": "I previously had my car at a different auto shop for 6 months. I was able take it to Lyk-Nu. Even though they were fully booked, they made my car a priority and fixed it within two weeks! My car was in amazing condition when I got it back.",
+      "author": "Google reviewer",
+      "date": "December 2022",
+      "rating": 5
+    },
+    {
+      "text": "Best place around!! Will help you any way possible. Great body and paint work as well.",
+      "author": "Google reviewer",
+      "date": "May 2025",
+      "rating": 5
+    },
+    {
+      "text": "Had car trouble at I-75. Pulled off the interstate and called Lyk Nu... Bill the mechanic hooked his computer and diagnosed it. He had it fixed in about an hour for a reasonable price. We would give them 6 stars if we could.",
+      "author": "Google reviewer",
+      "date": "October 2023",
+      "rating": 5
+    },
+    {
+      "text": "Great team of people here, excellent work! And pretty quick as well. Thank you for the quality work!",
+      "author": "Google reviewer",
+      "date": "March 2024",
+      "rating": 5
+    },
+    {
+      "text": "Had to have our car towed to a dealer and our insurance sent Jacub to tow it. He did a great job and was very pleasant to chat with on the 30 minute drive. Very professional and considerate.",
+      "author": "Google reviewer",
+      "date": "July 2026",
+      "rating": 5
+    }
+  ]
+}
