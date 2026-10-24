@@ -40,6 +40,11 @@ p{margin:0 0 1em}
 .site-header .container{display:flex;align-items:center;justify-content:space-between;height:72px;gap:1rem}
 .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;color:var(--ink)}
 .brand-mark{width:44px;height:44px;flex:none}
+.brand-logo{display:block;height:38px;width:auto;max-width:100%}
+@media (min-width:900px){.brand-logo{height:54px}}
+.footer-logo-plate{display:inline-block;background:#fff;border-radius:14px;padding:.8rem 1rem}
+.footer-logo{display:block;width:min(260px,70vw);height:auto}
+.admin-label{margin:0 0 0 .8rem;padding-left:.8rem;border-left:1px solid var(--ink-3);color:#c3cad2;font-size:.78rem}
 .brand-text{display:flex;flex-direction:column;line-height:1}
 .brand-name{font-family:var(--display);font-weight:800;font-size:1.65rem;letter-spacing:.5px}
 .brand-name span{color:var(--red)}
@@ -292,3 +297,5 @@ section{padding:clamp(3.5rem,8vw,6rem) 0}
 .glb button:hover,.glb button:focus-visible{background:var(--red)}
 .glb .glb-close{top:.8rem;right:.8rem}.glb .glb-prev{left:.6rem;top:50%}.glb .glb-next{right:.6rem;top:50%}
 .gallery-grid .g-item:last-child{grid-column:span 2}.gallery-grid .g-item:last-child img{aspect-ratio:8/3}
+.admin-top .brand-logo{height:34px}
+[hidden]{display:none!important}

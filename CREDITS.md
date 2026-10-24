@@ -26,4 +26,12 @@ Gallery files: `src/assets/img/gallery/shop-N.webp` and `shop-N-sm.webp`, where 
 If the shop has a photo of mechanical work (a car on a lift, engine work), replace `src/assets/img/mechanical-repair.webp` and `-sm.webp` with it. The site will then use no stock images at all.
 
 ## Logo
-`src/assets/logo-mark.svg` is a simple placeholder "LN" badge. It is **not** the shop's official logo. The tow trucks carry a "Lyk-Nu" script logo; if the owner has that artwork as a file, it should replace the placeholder.
+The Lyk-Nu logo is the shop's own artwork, supplied by the shop owner's team (originals in the repo: `images/logo-originals/Lyk-Nu Logo.png` = "LYK-NU" wordmark, `images/logo-originals/Lyk-Nu Full Logo.png` = wordmark plus "AUTO COLLISION & SERVICE CENTER" tagline). Nothing about the artwork was redrawn; it was only given a transparent background and resized.
+
+| File (`src/assets/img/logo/`) | Derived from | Used in |
+|---|---|---|
+| `lyknu-wordmark-400/800 .webp/.png` | Wordmark | Site header (all pages) and admin page header |
+| `lyknu-logo-full-600/1200 .webp/.png` | Full logo with tagline | Footer (on a white plate), schema.org `logo` (1200 PNG) |
+| `favicon-32.png`, `favicon-192.png`, `apple-touch-icon.png`, `/favicon.ico` | Letters of the wordmark stacked as "LYK / NU" on white | Browser tab icon, home-screen icon |
+| `../og-image.jpg` | Full logo over a blurred-dark shop photo | Link preview (Facebook, iMessage, etc.) |
+| `images/logo-transparent/*.png` (not published on the site) | Full-resolution transparent cutouts | Reuse (print, signage, social) |

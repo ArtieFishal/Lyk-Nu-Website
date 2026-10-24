@@ -76,7 +76,7 @@ const ld = {
   priceRange: '$$',
   url: SITE ? SITE + '/' : undefined,
   image: SITE ? SITE + '/assets/img/og-image.jpg' : undefined,
-  logo: SITE ? SITE + '/assets/logo-mark.svg' : undefined,
+  logo: SITE ? SITE + '/assets/img/logo/lyknu-logo-full-1200.png' : undefined,
   potentialAction: SITE ? { '@type': 'ReserveAction', target: SITE + '/book/', name: 'Schedule a free estimate' } : undefined,
 };
 // Note: third-party ratings are intentionally NOT put in aggregateRating (Google's self-serving review policy).
