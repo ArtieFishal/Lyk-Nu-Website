@@ -37,11 +37,12 @@ p{margin:0 0 1em}
 .topbar a{color:#fff;text-decoration:none;font-weight:600}
 .topbar .tb-left{display:flex;gap:1.2rem;flex-wrap:wrap}
 .site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line)}
-.site-header .container{display:flex;align-items:center;justify-content:space-between;height:72px;gap:1rem}
+.site-header .container{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem}
+@media (min-width:900px){.site-header .container{height:76px}}
 .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;color:var(--ink)}
 .brand-mark{width:44px;height:44px;flex:none}
-.brand-logo{display:block;height:38px;width:auto;max-width:100%}
-@media (min-width:900px){.brand-logo{height:54px}}
+.brand-logo{display:block;height:52px;width:auto;max-width:100%}
+@media (min-width:900px){.brand-logo{height:62px}}
 .footer-logo-plate{display:inline-block;background:#fff;border-radius:14px;padding:.8rem 1rem}
 .footer-logo{display:block;width:min(260px,70vw);height:auto}
 .admin-label{margin:0 0 0 .8rem;padding-left:.8rem;border-left:1px solid var(--ink-3);color:#c3cad2;font-size:.78rem}
@@ -57,7 +58,7 @@ p{margin:0 0 1em}
 .nav-toggle span{display:block;width:26px;height:3px;background:var(--ink);margin:5px 0;border-radius:2px}
 @media (max-width:900px){
   .nav-toggle{display:block}
-  .nav{position:absolute;top:72px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;padding:1rem 1.25rem 1.5rem;gap:.2rem;border-bottom:1px solid var(--line);box-shadow:var(--shadow);display:none}
+  .nav{position:absolute;top:64px;left:0;right:0;background:#fff;flex-direction:column;align-items:stretch;padding:1rem 1.25rem 1.5rem;gap:.2rem;border-bottom:1px solid var(--line);box-shadow:var(--shadow);display:none}
   .nav.open{display:flex}
   .nav a{padding:.7rem 0;border-bottom:1px solid var(--line)}
   .nav .btn{margin-top:.8rem;border:0}
@@ -297,5 +298,13 @@ section{padding:clamp(3.5rem,8vw,6rem) 0}
 .glb button:hover,.glb button:focus-visible{background:var(--red)}
 .glb .glb-close{top:.8rem;right:.8rem}.glb .glb-prev{left:.6rem;top:50%}.glb .glb-next{right:.6rem;top:50%}
 .gallery-grid .g-item:last-child{grid-column:span 2}.gallery-grid .g-item:last-child img{aspect-ratio:8/3}
-.admin-top .brand-logo{height:34px}
+.admin-top .container{height:60px}
+.admin-top .brand-logo{height:46px}
 [hidden]{display:none!important}
+@media (max-width:480px){
+  .topbar{font-size:.76rem}
+  .topbar .container{flex-wrap:nowrap;gap:.5rem;padding:.4rem 0}
+  .topbar .tb-left{flex-wrap:nowrap;gap:.5rem;white-space:nowrap}
+  .topbar a{white-space:nowrap}
+}
+@media (max-width:480px){.admin-label{display:none}}
