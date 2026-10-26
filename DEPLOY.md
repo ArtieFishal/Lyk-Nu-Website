@@ -77,13 +77,14 @@ All of this takes effect immediately; there's no need to redeploy.
 ## Optional: email notices for new bookings
 Without this, bookings still show up on `/admin/`. To also get an email:
 1. Create a free account at https://resend.com and verify the domain you'll send from (e.g. lyknu.com). Resend shows the DNS records to add.
+Emails are sent only when `RESEND_API_KEY` and `NOTIFY_FROM` are set.
 2. Add these environment variables in Netlify, then redeploy:
 
 | Key | Example |
 |---|---|
 | `RESEND_API_KEY` | `re_xxxxxxxx` (from Resend) |
 | `NOTIFY_FROM` | `Lyk-Nu Website <bookings@lyknu.com>` |
-| `NOTIFY_TO` | The shop email that should get new bookings |
+| `NOTIFY_TO` | Who gets new-booking emails. Optional: defaults to `notifyEmail` in `business.config.json` (mikefreeman@lyknu.com). Comma-separate for several. |
 | `NOTIFY_CUSTOMER` | `true` to also email the customer a confirmation (optional) |
 
 ---
@@ -105,4 +106,4 @@ Business details (phone, hours shown on the page, address, reviews, services) ar
 Anything that starts with `TODO` is a placeholder that couldn't be confirmed online. It stays hidden until you fill it in.
 
 ## Before going live: please confirm with the owner
-See the "Please confirm" list in the hand-off notes. It covers the towing hours, the email address to show, the service-area towns, insurance and certifications, and the review rating.
+See the "Please confirm" list in the hand-off notes. Still open: exact Facebook and Google page links, certifications, and keeping the review rating current. (Towing is 24/7, hours are Mon–Fri 8–5 with no Saturday hours, and the service area and insurance list are confirmed.)

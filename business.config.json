@@ -4,7 +4,7 @@
   "name": "Lyk-Nu Auto Collision & Service Center",
   "legalName": "Lyk-Nu Auto Collision & Service Center, Inc.",
   "shortName": "Lyk-Nu",
-  "tagline": "Collision repair, paint, mechanical service & towing in LaFollette, TN",
+  "tagline": "Collision repair, paint, full-service mechanic shop, 24/7 towing, jump starts & lockouts in LaFollette, TN",
   "foundedYear": 1968,
   "familyOwned": true,
   "owner": "Mike Freeman",
@@ -30,7 +30,13 @@
     { "days": "Saturday – Sunday", "hours": "Closed" }
   ],
   "hoursSchema": ["Mo-Fr 08:00-17:00"],
-  "towingNote": "TODO: confirm towing / roadside availability outside business hours (e.g. 24/7?) — leave empty to hide",
+  "towing": { "available247": true, "phone": "(423) 562-5156", "phoneE164": "+14235625156" },
+  "towingNote": "24/7 towing — call (423) 562-5156 any time, day or night.",
+  "holidayNote": "Open on holidays unless otherwise posted - call to confirm.",
+  "walkInNote": "Walk-ins welcome",
+  "walkInDetail": "or schedule an estimate to guarantee your time",
+  "warranty": "Limited Lifetime Warranty",
+  "notifyEmail": "mikefreeman@lyknu.com",
 
   "social": {
     "facebook": "https://www.facebook.com/310492218940",
@@ -46,8 +52,8 @@
     "show": true
   },
 
-  "insurancePartners": [],
-  "insuranceNote": "We handle insurance claims work. Bring your claim number and we will help you through the process.",
+  "insurancePartners": ["State Farm", "Farm Bureau", "Progressive", "Erie", "Allstate", "Geico", "Auto-Owners", "Safeco"],
+  "insuranceNote": "Once your claim number is issued, we handle the claim process for you.",
   "certifications": [],
 
   "usdot": "624512",

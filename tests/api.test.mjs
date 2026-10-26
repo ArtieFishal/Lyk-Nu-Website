@@ -56,7 +56,7 @@ await t('booking an open slot succeeds (with photo upload)', async () => {
 
 await t('booked slot disappears from availability', async () => {
   const a = await avail(D1); assert.ok(!a.days[0].slots.includes('10:00'));
-  assert.ok(a.days[0].slots.includes('10:30'));
+  assert.ok(a.days[0].slots.includes('10:20'));
 });
 
 await t('double-booking the same slot is rejected (409)', async () => {
@@ -87,6 +87,12 @@ await t('wrong admin password is rejected (401)', async () => {
   assert.equal(r.status, 401);
 });
 
+await t('built-in defaults: 20-minute estimates, 1 car per slot, notify email from config', async () => {
+  const core = await import('../netlify/lib/core.mjs');
+  assert.equal(core.DEFAULT_SETTINGS.slotMinutes, 20); assert.equal(core.DEFAULT_SETTINGS.capacityPerSlot, 1);
+  assert.equal(core.DEFAULT_NOTIFY_TO, 'mikefreeman@lyknu.com');
+});
+
 await t('correct admin password returns a working token', async () => {
   const r = await admin('login', { method: 'POST', body: JSON.stringify({ password: PW }) });
   assert.equal(r.status, 200); token = r.body.token;
@@ -98,14 +104,14 @@ await t('blocking 1:00–3:00 PM removes those slots and rejects bookings in it'
   const r = await admin('blocks', { method: 'POST', body: JSON.stringify({ startDate: D3, endDate: D3, allDay: false, startTime: '13:00', endTime: '15:00', reason: 'test' }) });
   assert.equal(r.status, 200); blockId = r.body.block.id;
   const a = await avail(D3);
-  for (const s of ['13:00', '13:30', '14:00', '14:30']) assert.ok(!a.days[0].slots.includes(s), `${s} should be blocked`);
-  assert.ok(a.days[0].slots.includes('12:30') && a.days[0].slots.includes('15:00'));
-  assert.equal((await book(D3, '13:30')).status, 409);
+  for (const s of ['13:00', '13:20', '13:40', '14:00', '14:20', '14:40']) assert.ok(!a.days[0].slots.includes(s), `${s} should be blocked`);
+  assert.ok(a.days[0].slots.includes('12:40') && a.days[0].slots.includes('15:00'));
+  assert.equal((await book(D3, '13:20')).status, 409);
 });
 
 await t('removing the block re-opens the times', async () => {
   assert.equal((await admin('blocks/' + blockId, { method: 'DELETE' })).status, 200);
-  assert.ok((await avail(D3)).days[0].slots.includes('13:30'));
+  assert.ok((await avail(D3)).days[0].slots.includes('13:20'));
 });
 
 await t('all-day block closes the whole day', async () => {
@@ -122,9 +128,9 @@ await t('changing weekly hours updates availability (close a weekday, change slo
   await admin('settings', { method: 'PUT', body: JSON.stringify({ weekly }) });
   assert.equal((await avail(D3)).days[0].open, false);
   await admin('settings', { method: 'PUT', body: JSON.stringify({ weekly: orig.weekly, slotMinutes: 60 }) });
-  const s = (await avail(D3)).days[0].slots; assert.ok(s.includes('09:00') && !s.includes('09:30'));
+  const s = (await avail(D3)).days[0].slots; assert.ok(s.includes('09:00') && !s.includes('09:20'));
   await admin('settings', { method: 'PUT', body: JSON.stringify(orig) });
-  assert.ok((await avail(D3)).days[0].slots.includes('09:30'));
+  assert.ok((await avail(D3)).days[0].slots.includes('09:20'));
 });
 
 await t('owner sees appointment details + photo; cancel frees the slot', async () => {

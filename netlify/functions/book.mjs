@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import {
   json, isDate, isTime, shopNow, getSettings, getBlocks, casUpdate, computeSlots, uploadStore,
-  sendEmail, fmtDate, fmtTime, BUSINESS_NAME,
+  sendEmail, fmtDate, fmtTime, BUSINESS_NAME, DEFAULT_NOTIFY_TO,
 } from '../lib/core.mjs';
 
 const MAX_PHOTOS = 4;
@@ -81,7 +81,7 @@ export default async (req) => {
 
   const when = `${fmtDate(data.date)} at ${fmtTime(data.time)}`;
   const vehicle = `${data.vehicleYear} ${data.vehicleMake} ${data.vehicleModel}`;
-  const notify = process.env.NOTIFY_TO;
+  const notify = process.env.NOTIFY_TO || DEFAULT_NOTIFY_TO;
   if (notify) {
     await sendEmail({
       to: notify.split(',').map((s) => s.trim()),

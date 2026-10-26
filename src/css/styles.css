@@ -308,3 +308,23 @@ section{padding:clamp(3.5rem,8vw,6rem) 0}
   .topbar a{white-space:nowrap}
 }
 @media (max-width:480px){.admin-label{display:none}}
+
+/* --- trust strip, walk-ins, insurance, notes --- */
+.hero-walkin{margin:1.1rem 0 1.3rem;color:#e7eaee;font-size:1rem}
+.hero-walkin strong{color:#fff}
+.trust-strip{background:#fff;border-bottom:1px solid var(--line)}
+.trust-strip .container{display:grid;gap:.5rem;padding-top:.85rem;padding-bottom:.85rem}
+.trust-strip [role=listitem]{display:flex;align-items:center;gap:.6rem;font-size:.98rem}
+.trust-strip svg{flex:none;width:22px;height:22px;color:var(--red)}
+.trust-strip strong{font-family:var(--display);font-size:1.15rem;letter-spacing:.02em;text-transform:uppercase}
+.trust-strip a{font-weight:700;color:var(--red);white-space:nowrap}
+@media(min-width:760px){.trust-strip .container{grid-template-columns:repeat(3,auto);justify-content:space-between}}
+.tag-247{display:inline-block;vertical-align:middle;margin-left:.4rem;background:var(--red);color:#fff;font-family:var(--display);font-size:.95rem;letter-spacing:.06em;padding:.1rem .5rem;border-radius:6px}
+.hours-note{margin:.5rem 0 0;font-size:.92rem;font-weight:500;color:var(--steel)}
+.page-hero-note{margin-top:.8rem;font-size:1rem;color:#e7eaee}
+.page-hero-note strong{color:#fff}
+.insurance{display:grid;gap:1.6rem;align-items:center}
+.insurance .fine{font-size:.86rem;color:var(--steel)}
+.insurer-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.55rem}
+.insurer-list li{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:.45rem 1rem;font-weight:600;font-size:.95rem}
+@media(min-width:900px){.insurance{grid-template-columns:1.1fr 1fr}}

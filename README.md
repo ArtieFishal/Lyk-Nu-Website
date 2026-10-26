@@ -21,9 +21,11 @@ A static website with a built-in online estimate scheduler, running on Netlify (
 
 ## Changing business info
 Edit **`business.config.json`** (phone, address, hours text, reviews, services, etc.), then redeploy. A value that starts with `TODO` is a placeholder: it stays hidden on the site, and the build prints a warning for it.
+That file also holds the towing note (24/7), holiday note, walk-in wording, warranty line, insurance list (text only, no logos) and the default booking-notification email (`notifyEmail`).
 Booking hours are **not** set in that file. The owner sets them on `/admin/`, and the public calendar follows them immediately.
 
 ## How booking works
+* Estimates are 20 minutes each, one car at a time (the owner can change both on `/admin/`). Walk-ins are welcome; booking guarantees a time.
 * Customers only see open slots. Closed days, blocked time, slots that are too soon, and slots that are already full can't be picked.
 * The server re-checks every booking. Writes use compare-and-swap, so two people can't grab the same slot even if they submit at the same moment.
 * Customers can attach up to 4 photos. The browser shrinks them before upload.

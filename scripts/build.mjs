@@ -62,7 +62,7 @@ const ld = {
   '@type': ['AutoBodyShop', 'AutoRepair'],
   name: cfg.name,
   legalName: cfg.legalName || undefined,
-  description: `Family owned and operated since ${cfg.foundedYear}. Collision repair, auto body and paint, mechanical repair and towing in ${a.displayCity || a.city}, Tennessee.`,
+  description: `Family owned and operated since ${cfg.foundedYear}. Collision repair, auto body and paint, full-service mechanic shop, 24/7 towing, jump starts, lockout service in ${a.displayCity || a.city}, Tennessee. Walk-ins welcome.`,
   telephone: cfg.phoneE164 || cfg.phone,
   faxNumber: val(cfg.fax) || undefined,
   email: email || undefined,
@@ -70,7 +70,22 @@ const ld = {
   address: { '@type': 'PostalAddress', streetAddress: a.street, addressLocality: a.city, addressRegion: a.state, postalCode: a.zip, addressCountry: a.country || 'US' },
   geo: geo ? { '@type': 'GeoCoordinates', latitude: cfg.geo.lat, longitude: cfg.geo.lng } : undefined,
   openingHours: cfg.hoursSchema && cfg.hoursSchema.length ? cfg.hoursSchema : undefined,
-  areaServed: (cfg.serviceArea || []).filter((x) => !isTodo(x)).map((n) => ({ '@type': 'Place', name: `${n}${/county/i.test(n) ? '' : ''}, TN` })),
+  areaServed: (cfg.serviceArea || []).filter((x) => !isTodo(x)).map((n) => /county/i.test(n)
+    ? { '@type': 'AdministrativeArea', name: `${n}, TN` }
+    : { '@type': 'City', name: `${n}, TN` }),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Services',
+    itemListElement: [
+      ['Collision repair', 'Collision repair for passenger and commercial vehicles.'],
+      ['Auto body and paint', 'Body and fender work, straightening and refinishing.'],
+      ['Mechanical repair', 'Full-service mechanic shop: general mechanical repair and computer diagnostics.'],
+      ...(cfg.towing && cfg.towing.available247 ? [['24/7 towing', 'Towing and road service, available 24 hours a day, 7 days a week.']] : [['Towing and road service', 'Light-duty and rollback towing.']]),
+      ['Jump starts', 'Jump-start service for vehicles with a dead battery.'],
+      ['Lockout service', 'Unlocking vehicle doors for people locked out of their car.'],
+      ['Insurance claim repairs', 'We work with insurance claims and handle the claim process once the claim number is issued.'],
+    ].map(([n, d]) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: n, description: d, areaServed: 'Campbell County, TN' } })),
+  },
   sameAs: [social.facebook, social.yelp].map(val).filter(Boolean),
   hasMap: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`,
   priceRange: '$$',
@@ -98,8 +113,10 @@ const blocks = {
   JSONLD: jsonld,
   CANONICAL: '', // set per page below
   SOCIAL_LINKS: socialLinks.length ? `<p style="display:flex;gap:1rem;flex-wrap:wrap">${socialLinks.join('')}</p>` : '',
-  INSURANCE: (cfg.insurancePartners || []).filter((x) => !isTodo(x)).length ? `<p class="muted" style="margin-top:.6rem;font-size:.9rem">Working with: ${esc(cfg.insurancePartners.filter((x) => !isTodo(x)).join(', '))}</p>` : '',
-  TOWING_NOTE: val(cfg.towingNote) ? `<div><dt>Towing</dt><dd>${esc(cfg.towingNote)}</dd></div>` : '',
+  INSURANCE_LIST: (cfg.insurancePartners || []).filter((x) => !isTodo(x)).map((x) => `<li>${esc(x)}</li>`).join(''),
+  INSURANCE_SENTENCE: (() => { const l = (cfg.insurancePartners || []).filter((x) => !isTodo(x)); return esc(l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l.at(-1) : (l[0] || '')); })(),
+  TOWING_NOTE: val(cfg.towingNote) ? `<div><dt>Towing</dt><dd><strong>24/7</strong> — <a href="tel:${esc((cfg.towing && cfg.towing.phoneE164) || cfg.phoneE164)}">${esc((cfg.towing && cfg.towing.phone) || cfg.phone)}</a>, any time, day or night.</dd></div>` : '',
+  HOLIDAY_NOTE: val(cfg.holidayNote) ? `<p class="hours-note">${esc(cfg.holidayNote)}</p>` : '',
   MAP_SRC: `https://maps.google.com/maps?q=${geo ? encodeURIComponent(geo) + '+(' + encodeURIComponent(cfg.name) + ')' : mapQuery}&z=15&output=embed`,
   DIRECTIONS: `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`,
   SERVICE_AREA: esc((() => { const l = (cfg.serviceArea || []).filter((x) => !isTodo(x)); return l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l.at(-1) : (l[0] || `${a.displayCity}, TN`); })()),
@@ -107,7 +124,7 @@ const blocks = {
   EMAIL_LINE: email ? `<br><a href="mailto:${esc(email)}">${esc(email)}</a>` : '',
   FAX_LINE: val(cfg.fax) ? `<br>Fax: ${esc(cfg.fax)}` : '',
   USDOT_LINE: val(cfg.usdot) ? `USDOT ${esc(cfg.usdot)} · ` : '',
-  FOOTER_BLURB: esc(`Family owned and operated since ${cfg.foundedYear}. Collision repair, paint & body, mechanical service and towing in ${a.displayCity || a.city}, Tennessee.`),
+  FOOTER_BLURB: esc(`Family owned and operated since ${cfg.foundedYear}. Collision repair, paint & body, a full-service mechanic shop and 24/7 towing in ${a.displayCity || a.city}, Tennessee.`),
 };
 
 const partials = Object.fromEntries(fs.readdirSync(path.join(SRC, 'partials')).map((f) => [f.replace('.html', ''), fs.readFileSync(path.join(SRC, 'partials', f), 'utf8')]));

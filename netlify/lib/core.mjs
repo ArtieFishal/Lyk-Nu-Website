@@ -3,12 +3,15 @@
 // clock times ("HH:MM") on shop-local dates ("YYYY-MM-DD") in SHOP_TIMEZONE.
 import { getStore } from '@netlify/blobs';
 import crypto from 'node:crypto';
+import siteConfig from '../../business.config.json' with { type: 'json' };
 
 export const TZ = process.env.SHOP_TIMEZONE || 'America/New_York';
+// Default booking-notification recipient (env NOTIFY_TO overrides). Emails only go out once RESEND_API_KEY + NOTIFY_FROM are set.
+export const DEFAULT_NOTIFY_TO = siteConfig.notifyEmail || '';
 export const BUSINESS_NAME = process.env.BUSINESS_NAME || 'Lyk-Nu Auto Collision & Service Center';
 
 export const DEFAULT_SETTINGS = {
-  slotMinutes: 30,          // length of one estimate appointment
+  slotMinutes: 20,          // length of one estimate appointment (owner can change on /admin)
   capacityPerSlot: 1,       // how many estimates can be booked at the same time
   minNoticeHours: 2,        // customers can't book closer than this to "now"
   maxDaysAhead: 60,         // how far ahead customers can book

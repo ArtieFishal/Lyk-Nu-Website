@@ -3,7 +3,7 @@
 <head>
 {{> head}}
 <title>Schedule a Free Estimate | {{name}}</title>
-<meta name="description" content="Book a free collision or auto body estimate online at {{name}} in LaFollette, TN. Pick an open time that works for you.">
+<meta name="description" content="Book a free collision or auto body estimate online at {{name}} in LaFollette, TN. About 20 minutes each. Walk-ins welcome. 24/7 towing, jump starts & lockouts: {{phone}}.">
 {{CANONICAL}}
 <meta property="og:title" content="Schedule a Free Estimate — {{name}}">
 <meta property="og:image" content="{{ABS}}/assets/img/og-image.jpg">
@@ -16,6 +16,7 @@
       <span class="eyebrow" style="color:#ff6b70">Free estimates</span>
       <h1 style="font-size:clamp(2.2rem,6vw,3.6rem)">Schedule your estimate</h1>
       <p>Choose an open day and time, tell us about your vehicle, and we'll see you at {{address.street}}. Prefer to talk? Call <a href="tel:{{phoneE164}}" style="color:#fff;font-weight:700">{{phone}}</a>.</p>
+      <p class="page-hero-note"><strong>{{walkInNote}}</strong> — {{walkInDetail}}. Each estimate takes about 20 minutes. {{holidayNote}}</p>
     </div>
   </div>
   <div class="container">
@@ -69,7 +70,8 @@
           <dt>Where</dt><dd>{{address.street}}, {{address.displayCity}}</dd>
         </dl>
         <button class="btn btn-red" id="submit-btn" form="book-form" type="submit" style="width:100%" disabled>Book My Estimate</button>
-        <p class="muted" style="font-size:.88rem;margin-top:.9rem">Estimates are free. Need to change your time? Call {{phone}}.</p>
+        <p class="muted" style="font-size:.88rem;margin-top:.9rem">Estimates are free and take about 20 minutes. Need to change your time? Call {{phone}}.</p>
+        <p class="muted" style="font-size:.88rem;margin-top:.5rem">{{walkInNote}} — {{walkInDetail}}. {{holidayNote}}</p>
       </aside>
     </div>
     <div id="confirm" class="panel confirm" hidden style="margin:2.5rem auto 4rem;max-width:640px">
