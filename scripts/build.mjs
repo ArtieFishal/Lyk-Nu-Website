@@ -119,6 +119,7 @@ const blocks = {
   CANONICAL: '', // set per page below
   SOCIAL_LINKS: socialLinks.length ? `<p class="social-links">${socialLinks.join('')}</p>` : '',
   INSURANCE_LIST: insurers.map((x) => `<li>${x.url ? `<a class="insurer-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.name)}<span class="sr-only"> (official website, opens in a new tab)</span></a>` : `<span class="insurer-link">${esc(x.name)}</span>`}</li>`).join(''),
+  INSURANCE_OPTIONS: insurers.map((x) => `<option value="${esc(x.name)}">${esc(x.name)}</option>`).join(''),
   INSURANCE_SENTENCE: (() => { const l = insurers.map((x) => x.name); return esc(l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l.at(-1) : (l[0] || '')); })(),
   TOWING_NOTE: val(cfg.towingNote) ? `<div><dt>Towing</dt><dd><strong>24/7</strong> — <a href="tel:${esc((cfg.towing && cfg.towing.phoneE164) || cfg.phoneE164)}">${esc((cfg.towing && cfg.towing.phone) || cfg.phone)}</a>, any time, day or night.</dd></div>` : '',
   HOLIDAY_NOTE: val(cfg.holidayNote) ? `<p class="hours-note">${esc(cfg.holidayNote)}</p>` : '',
