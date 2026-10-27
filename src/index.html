@@ -29,22 +29,11 @@
         </div>
         <p class="hero-appt"><strong>{{appointmentNote}}</strong> · {{appointmentDetail}}</p>
         <div class="hero-badges">
-          <div><strong>{{YEARS}}+</strong>years serving Campbell County</div>
-          {{HERO_RATING}}
           <div><strong>Mon–Fri</strong>8:00 AM – 5:00 PM</div>
         </div>
       </div>
     </div>
   </section>
-
-  <div class="trust-strip" role="list" aria-label="Why choose Lyk-Nu">
-    <div class="container">
-      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:home}}</span><span class="ti-txt"><strong>Family owned</strong><small>Since {{foundedYear}} in {{address.displayCity}}</small></span></div>
-      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:truck}}</span><span class="ti-txt"><strong>24/7 towing</strong><small><a href="tel:{{phoneE164}}">{{phone}}</a> · roadside help</small></span></div>
-      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:cal}}</span><span class="ti-txt"><strong>{{appointmentNote}}</strong><small>Meet the owner</small></span></div>
-      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:shield}}</span><span class="ti-txt"><strong>Lifetime paint warranty</strong><small>Limited, on paint work</small></span></div>
-    </div>
-  </div>
 
   <section id="services" class="section bg-light">
     <div class="container">
@@ -70,32 +59,31 @@
           <img src="/assets/img/towing-flatbed-sm.webp" alt="Lyk-Nu rollback tow truck" loading="lazy" width="600" height="400">
           <div class="body"><h3>Towing &amp; Road Service <span class="tag-247">24/7</span></h3><p>24/7 towing with rollback and wrecker trucks. Jumpstarts, lockouts, and other roadside help — just ask. Call <a href="tel:{{phoneE164}}"><strong>{{phone}}</strong></a> any time.</p></div>
         </article>
-        <article class="service no-img">
-          <div class="body">
-            <div class="icon">{{i:shield}}</div>
-            <h3>Insurance Claims</h3><p>We work with insurance claims. {{insuranceNote}} <a href="#insurance">See the claims we work with →</a></p>
-          </div>
-        </article>
-        <article class="service no-img">
-          <div class="body">
-            <div class="icon">{{i:glass}}</div>
-            <h3>Auto Glass &amp; Windshields</h3><p>Cracked or broken windshield or window glass? Ask us about replacement when you bring your vehicle in.</p>
-          </div>
-        </article>
       </div>
-      <ul class="chips" aria-label="More services">
-        <li class="chip">Frame straightening</li>
-        <li class="chip">Full-service mechanic shop</li>
-        <li class="chip">A/C service</li>
-        <li class="chip">Brakes</li>
-        <li class="chip">Shocks &amp; struts</li>
-        <li class="chip">24/7 towing</li>
-        <li class="chip">Jumpstarts</li>
-        <li class="chip">Lockouts</li>
-        <li class="chip">Roadside help — just ask</li>
+      <ul class="chips" aria-label="Also available">
+        <li class="chip">Auto glass &amp; windshields</li>
         <li class="chip">Vehicle storage</li>
-        <li class="chip">Small commercial vehicles</li>
+        <li class="chip-link"><a href="#insurance">Insurance claims handled for you — see the companies →</a></li>
       </ul>
+    </div>
+  </section>
+
+  <section id="paint" class="section band-dark slant-both">
+    <div class="container paint-feature">
+      <div class="paint-copy">
+        <span class="eyebrow">Paint department</span>
+        <h2>A look inside our paint shop</h2>
+        <p>Refinishing starts with the right setup: a dedicated paint booth and an on-site paint mixing room stocked with PPG Envirobase High Performance paint.</p>
+        <p class="paint-link"><a href="/book/">{{i:cal}} See availability</a></p>
+      </div>
+      <figure class="paint-fig">
+        <img src="/assets/img/paint-booth-sm.webp" srcset="/assets/img/paint-booth-sm.webp 600w, /assets/img/paint-booth.webp 1200w" sizes="(min-width:900px) 28vw, 46vw" alt="Lyk-Nu paint booth inside the shop, with PPG and Envirobase stickers on the doors" loading="lazy" decoding="async" width="600" height="800">
+        <figcaption>Our paint booth</figcaption>
+      </figure>
+      <figure class="paint-fig">
+        <img src="/assets/img/paint-mixing-room-sm.webp" srcset="/assets/img/paint-mixing-room-sm.webp 600w, /assets/img/paint-mixing-room.webp 1200w" sizes="(min-width:900px) 28vw, 46vw" alt="Paint mixing room with shelves of PPG Envirobase paint, a mixing scale and a computer screen" loading="lazy" decoding="async" width="600" height="800">
+        <figcaption>Our paint mixing room</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -108,48 +96,18 @@
       <div>
         <span class="eyebrow">About Lyk-Nu</span>
         <h2>A family shop your neighbors trust</h2>
-        <p>{{legalName}} has been family owned and operated since {{foundedYear}}. We offer professional and reliable collision repair for passenger vehicles and small commercial vehicles, and we're experts at restoring your vehicle to pre-accident condition.</p>
-        <p>Whether you've been in a wreck, need paint and body work, have a mechanical problem, or need a tow at any hour, our team treats you — and your vehicle — like family.</p>
-        <ul class="checks">
-          <li>{{i:check}}<span><strong>Honest, fair pricing</strong> — customers say it again and again.</span></li>
-          <li>{{i:check}}<span><strong>24/7 towing</strong> and roadside help when you're stuck on the road.</span></li>
-          <li>{{i:check}}<span><strong>Body, paint, full-service mechanic &amp; towing</strong> under one roof.</span></li>
-                    <li>{{i:check}}<span><strong>Insurance claims</strong> handled for you.</span></li>
-          <li>{{i:check}}<span><strong>Meet the owner</strong> from the start — book an appointment and get your estimate on your schedule.</span></li>
-        </ul>
+        <p>{{legalName}} is a family-owned and operated shop in {{address.displayCity}}, and we're experts at restoring your vehicle to pre-accident condition.</p>
+        <p>Whether it's a wreck, a mechanical problem, or a tow at any hour, our team treats you — and your vehicle — like family. Customers tell us again and again that our pricing is honest and fair.</p>
       </div>
     </div>
   </section>
-
-  <section id="work" class="section bg-light">
-    <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Our Work</span>
-        <h2>Real vehicles. Real results.</h2>
-        <p>Every photo here was taken at the Lyk-Nu shop. Tap any photo to see it larger.</p>
-      </div>
-      <div class="before-after">
-        <figure class="g-item ba-before"><a href="/assets/img/gallery/shop-2.webp" data-lightbox="work" data-caption="Before: red and silver Chevy pickup torn down and masked for paint in the shop"><img src="/assets/img/gallery/shop-2-sm.webp" alt="Before: red and silver Chevy pickup torn down and masked for paint in the shop" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Before — torn down &amp; masked</figcaption></figure>
-        <figure class="g-item ba-after"><a href="/assets/img/gallery/shop-1.webp" data-lightbox="work" data-caption="After: the same red and silver Chevy pickup finished and parked outside"><img src="/assets/img/gallery/shop-1-sm.webp" alt="After: the same red and silver Chevy pickup finished and parked outside" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>After — back on the road</figcaption></figure>
-      </div>
-      <div class="gallery-grid">
-        <figure class="g-item"><a href="/assets/img/gallery/shop-5.webp" data-lightbox="work" data-caption="Candy-red lifted Ford Excursion, finished and washed, in the shop bay"><img src="/assets/img/gallery/shop-5-sm.webp" alt="Candy-red lifted Ford Excursion, finished and washed, in the shop bay" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Candy-red Ford Excursion</figcaption></figure>
-        <figure class="g-item"><a href="/assets/img/gallery/shop-4.webp" data-lightbox="work" data-caption="Red and silver Chevy pickup on the shop floor during repair"><img src="/assets/img/gallery/shop-4-sm.webp" alt="Red and silver Chevy pickup on the shop floor during repair" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>On the shop floor</figcaption></figure>
-        <figure class="g-item"><a href="/assets/img/gallery/shop-3.webp" data-lightbox="work" data-caption="Finished red and silver Chevy pickup, front three-quarter view"><img src="/assets/img/gallery/shop-3-sm.webp" alt="Finished red and silver Chevy pickup, front three-quarter view" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Two-tone Chevy, finished</figcaption></figure>
-        <figure class="g-item"><a href="/assets/img/gallery/shop-6.webp" data-lightbox="work" data-caption="Lyk-Nu rollback tow truck parked on the roadside"><img src="/assets/img/gallery/shop-6-sm.webp" alt="Lyk-Nu rollback tow truck parked on the roadside" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Our rollback</figcaption></figure>
-        <figure class="g-item"><a href="/assets/img/gallery/shop-7.webp" data-lightbox="work" data-caption="Lyk-Nu wrecker tow truck in front of the shop"><img src="/assets/img/gallery/shop-7-sm.webp" alt="Lyk-Nu wrecker tow truck in front of the shop" loading="lazy" decoding="async" width="800" height="600"></a><figcaption>Our wrecker at the shop</figcaption></figure>
-      </div>
-      <p class="work-cta"><a class="btn btn-red" href="/book/">{{i:cal}} Get your free estimate</a></p>
-    </div>
-  </section>
-
 
   <section id="how" class="section band-dark slant-both">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">How it works</span>
         <h2>Getting an estimate is easy</h2>
-        <p>Pick a time online — it takes about two minutes. {{appointmentNote}}: {{appointmentDetail}}</p>
+        <p>Pick a time online — it takes about two minutes.</p>
       </div>
       <div class="steps">
         <div class="step"><h3>Pick a time</h3><p>Choose an available day and time that fits your schedule.</p></div>
@@ -166,10 +124,10 @@
       <div>
         <span class="eyebrow">Insurance claims</span>
         <h2>We work with your insurance</h2>
-        <p>We work with claims from {{INSURANCE_SENTENCE}}. Once your claim number is issued, we handle the claim process for you.</p>
-        <p class="fine">Lyk-Nu is an independent, family-owned shop. Company names are listed only to show the claims we work with and do not imply endorsement or affiliation.</p>
+        <p>{{insuranceNote}}</p>
+        <p class="fine">Lyk-Nu is an independent, family-owned shop. Company names are listed only to show which insurers we work with and do not imply endorsement or affiliation.</p>
       </div>
-      <ul class="insurer-list" aria-label="Insurance claims we work with">{{INSURANCE_LIST}}</ul>
+      <ul class="insurer-list" aria-label="Insurance companies we work with">{{INSURANCE_LIST}}</ul>
     </div>
   </section>
 
@@ -189,7 +147,7 @@
 
   <div class="cta-band">
     <div class="container">
-      <div><h2>Been in an accident?</h2><p>Book a free estimate online and meet the owner on a schedule that works for you. Towing is available 24/7.</p></div>
+      <div><h2>Been in an accident?</h2><p>Pick a time that works for you — or call any hour if you need a tow.</p></div>
       <div class="cta-actions">
         <a class="btn btn-light btn-lg" href="/book/">See availability</a>
         <a class="btn btn-ghost btn-lg" href="tel:{{phoneE164}}">{{phone}}</a>
@@ -211,7 +169,6 @@
             <div><dt>Phone</dt><dd><a href="tel:{{phoneE164}}">{{phone}}</a></dd></div>
             {{EMAIL_DD}}
             <div><dt>Hours</dt><dd>{{HOURS_TABLE}}{{HOLIDAY_NOTE}}</dd></div>
-            <div><dt>Estimates</dt><dd><strong>{{appointmentNote}}.</strong> {{appointmentDetail}} <a href="/book/">See availability →</a></dd></div>
             {{TOWING_NOTE}}
           </dl>
           <div class="contact-actions">

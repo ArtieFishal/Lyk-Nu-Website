@@ -4,7 +4,6 @@ A static website with a built-in online estimate scheduler, running on Netlify (
 
 * **Public site:** `/` home, `/book/` schedule an estimate (`/estimate` redirects there)
 * **Owner page:** `/admin/` is for the owner only and is **not linked anywhere on the public site** (type the address to reach it). He uses it to see appointments (and damage photos), to **block off time when he won't be at the shop**, and to set his **estimate availability windows**. It does not change the shop's posted hours
-* **Our Work gallery:** real Lyk-Nu shop photos with a tap-to-enlarge viewer, plus a before/after of a two-tone Chevy pickup
 * **👉 Deploying:** see **[DEPLOY.md](DEPLOY.md)** (written for non-developers). Drag-and-drop deploys will **not** work because the booking system needs Netlify Functions.
 * **Image credits and which photo is used where:** see **[CREDITS.md](CREDITS.md)**
 
