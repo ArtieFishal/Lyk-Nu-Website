@@ -54,8 +54,11 @@ const reviewsHtml = (cfg.reviews || []).filter((x) => x.text && !isTodo(x.text))
 const social = cfg.social || {};
 const ext = 'target="_blank" rel="noopener noreferrer"';
 const NEWTAB = '<span class="sr-only"> (opens in a new tab)</span>';
+// Facebook links open in the SAME tab and use the m. host: on iPhones a target=_blank link to www.facebook.com
+// can fail iOS's universal-link hand-off to the Facebook app and bounce back. JSON-LD sameAs keeps the www URL.
+const fbHref = val(social.facebook) ? social.facebook.replace('://www.facebook.com', '://m.facebook.com') : '';
 const socialLinks = [
-  val(social.facebook) && `<a href="${esc(social.facebook)}" ${ext} aria-label="${esc(cfg.name)} on Facebook (opens in a new tab)">${ICONS.fb}<span>Facebook</span></a>`,
+  fbHref && `<a href="${esc(fbHref)}" rel="noopener noreferrer" aria-label="${esc(cfg.name)} on Facebook">${ICONS.fb}<span>Facebook</span></a>`,
   val(social.google) && `<a href="${esc(social.google)}" ${ext}>Google${NEWTAB}</a>`,
   val(social.yelp) && `<a href="${esc(social.yelp)}" ${ext}>Yelp${NEWTAB}</a>`,
 ].filter(Boolean);
@@ -129,7 +132,7 @@ const blocks = {
   MAP_SRC: `https://maps.google.com/maps?q=${geo ? encodeURIComponent(geo) + '+(' + encodeURIComponent(cfg.name) + ')' : mapQuery}&z=15&output=embed`,
   DIRECTIONS: `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`,
   SERVICE_AREA: esc((() => { const l = (cfg.serviceArea || []).filter((x) => !isTodo(x)); return l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l.at(-1) : (l[0] || `${a.displayCity}, TN`); })()),
-  FB_DD: val(social.facebook) ? `<div><dt>Facebook</dt><dd><a href="${esc(social.facebook)}" ${ext}>Find us on Facebook${NEWTAB}</a></dd></div>` : '',
+  FB_DD: fbHref ? `<div><dt>Facebook</dt><dd><a href="${esc(fbHref)}" rel="noopener noreferrer">Find us on Facebook</a></dd></div>` : '',
   EMAIL_DD: email ? `<div><dt>Email</dt><dd><a href="mailto:${esc(email)}">${esc(email)}</a></dd></div>` : '',
   EMAIL_LINE: email ? `<br><a href="mailto:${esc(email)}">${esc(email)}</a>` : '',
   FAX_LINE: val(cfg.fax) ? `<br>Fax: ${esc(cfg.fax)}` : '',
