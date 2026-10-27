@@ -46,6 +46,18 @@ await t('validation rejects bad input with field errors (400)', async () => {
   assert.ok(r.body.fields.phone && r.body.fields.vehicleYear && r.body.fields.description);
 });
 
+await t('phone is required: missing, blank or <10 digits is rejected with 400', async () => {
+  for (const phone of ['', '   ', '555-0100', '(423) 555-01']) {
+    const r = await book(D1, '09:00', { phone });
+    assert.equal(r.status, 400, `phone "${phone}" should be rejected`); assert.ok(r.body.fields.phone, 'phone error present');
+  }
+  const fd = new FormData(); // field omitted entirely
+  for (const [k, v] of Object.entries({ date: D1, time: '09:00', name: 'No Phone', vehicleYear: '2018', vehicleMake: 'Ford', vehicleModel: 'F-150', description: 'Dent in the door panel.' })) fd.set(k, v);
+  const r = await fetch(`${BASE}/api/book`, { method: 'POST', body: fd });
+  assert.equal(r.status, 400); const b = await r.json(); assert.match(b.fields.phone, /required/i);
+  assert.match((await book(D1, '09:00', { phone: '123' })).body.fields.phone, /10 digits/);
+});
+
 let apptId, photoKey;
 await t('booking an open slot succeeds (with photo upload)', async () => {
   const jpg = fs.readFileSync(new URL('../src/assets/img/og-image.jpg', import.meta.url));

@@ -31,7 +31,8 @@ export default async (req) => {
   if (!isDate(data.date)) errors.date = 'Pick a date.';
   if (!isTime(data.time)) errors.time = 'Pick a time.';
   if (data.name.length < 2) errors.name = 'Enter your name.';
-  if (data.phone.replace(/\D/g, '').length < 10) errors.phone = 'Enter a phone number with area code.';
+  if (!data.phone) errors.phone = 'Phone number is required so we can reach you about your appointment.';
+  else if (data.phone.replace(/\D/g, '').length < 10) errors.phone = 'Enter a phone number with area code (at least 10 digits).';
   if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.email = 'Enter a valid email or leave it blank.';
   if (data.description.length < 5) errors.description = 'Briefly describe the damage or problem.';
 

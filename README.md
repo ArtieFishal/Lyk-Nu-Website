@@ -30,6 +30,8 @@ The shop's *posted* hours (Mon–Fri 8–5) are text in that file. The hours cus
 * The server re-checks every booking. Writes use compare-and-swap, so two people can't grab the same slot even if they submit at the same moment.
 * Customers can attach up to 4 photos (the browser shrinks them before upload). Photos are stored privately, shown as thumbnails on the `/admin/` appointment, **attached to the notification email**, and also linked from it with expiring signed links (`/api/photo`, 30 days).
 * The booking form's **Year**, **Make**, **Model** and **Insurance company** are plain native dropdowns (the most reliable on phones; no type-ahead lists). Models fill in after a make is picked. **Other (type it in)** reveals a text box. Makes and models come from a static list in `src/js/vehicles.js` (no outside lookups); edit that file to add more. Insurers come from `insurancePartners` in `business.config.json`. The server accepts and cleans whatever is posted (or an old single `vehicle` string). Browser test of the form: `tests/ui.test.mjs` (needs Playwright; see the file header).
+* **Phone is required** on the booking form (at least 10 digits). It's checked in the browser and again on the server (`book.mjs` returns 400 with a `fields.phone` message).
+* **Voice typing:** under "What happened?" a mic button lets customers dictate the description (the textarea stays editable; limit 2000 characters). It uses the browser's built-in Web Speech API, so there's no server code or paid service. The button only appears where the browser supports it over HTTPS (iPhone Safari, Chrome on Android/desktop, Edge); elsewhere customers just type. The audio is converted to text by the device/browser's own speech service (Apple or Google); the shop only receives the text. Logic is in `src/js/book.js` (`dictation`), tests in `tests/ui.test.mjs` use a mocked `SpeechRecognition`.
 * Optional email notices go through [Resend](https://resend.com) (see DEPLOY.md). Without it, appointments still show up on `/admin/`.
 
 ## Developer notes
@@ -37,7 +39,7 @@ The shop's *posted* hours (Mon–Fri 8–5) are text in that file. The hours cus
 npm install
 export ADMIN_PASSWORD=choose-one SESSION_SECRET=random-string
 npm run dev            # builds src/ -> public/ and runs netlify dev on :8888
-ADMIN_PASSWORD=choose-one BASE=http://localhost:8888 npm test   # 19 end-to-end API tests
+ADMIN_PASSWORD=choose-one BASE=http://localhost:8888 npm test   # end-to-end API tests
 ```
 * `src/` holds templates (`{{config.x}}`, `{{> partial}}`, `{{i:icon}}`); `scripts/build.mjs` renders them into `public/`.
 * `netlify/functions/`: `availability.mjs`, `book.mjs`, `admin.mjs`; shared logic is in `netlify/lib/core.mjs`.

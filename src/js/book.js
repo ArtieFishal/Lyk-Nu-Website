@@ -156,6 +156,62 @@
   // Value to send for a select that may be "Other" (typed text).
   function picked(selId, otherId) { const s = $(selId); return s.value === OTHER ? $(otherId).value.trim() : s.value.trim(); }
 
+  // ---------- voice typing (Web Speech API; no server or third-party service) ----------
+  const MAX_DESC = 2000;
+  let stopDictation = () => {};
+  (function dictation() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const ta = $('description'), box = $('dictate'), btn = $('mic-btn'), text = $('mic-text'), status = $('mic-status');
+    if (!SR || !window.isSecureContext || !box || !btn) return; // unsupported: leave the textarea alone
+    box.hidden = false; $('mic-privacy').hidden = false;
+    const IDLE = 'Tap the mic and tell us what happened', LISTENING = 'Listening… tap to stop';
+    let rec = null, listening = false, base = '', heard = false, failed = false;
+    const clamp = (s) => {
+      if (s.length <= MAX_DESC) return s;
+      let c = s.slice(0, MAX_DESC); const sp = c.lastIndexOf(' ');
+      if (sp > MAX_DESC - 30 && s[MAX_DESC] !== ' ') c = c.slice(0, sp);
+      return c.trimEnd();
+    };
+    function ui(on) {
+      listening = on; box.classList.toggle('is-listening', on); btn.setAttribute('aria-pressed', on);
+      text.textContent = on ? LISTENING : IDLE;
+      btn.setAttribute('aria-label', on ? 'Listening. Tap to stop voice typing.' : 'Start voice typing. Tap the mic and tell us what happened.');
+    }
+    function say(msg, isErr) { status.textContent = msg; box.classList.toggle('has-error', !!isErr); }
+    const MSG = {
+      'not-allowed': "Microphone access is blocked. Allow it in your browser settings, or just type below.",
+      'service-not-allowed': "Voice typing isn't allowed on this device or browser. Please type below.",
+      'audio-capture': "We couldn't find a microphone. Please type below.",
+      'no-speech': "We didn't hear anything. Tap the mic and try again, or type below.",
+      network: "Voice typing needs an internet connection. Please try again or type below.",
+      'language-not-supported': "Voice typing isn't available in this browser. Please type below.",
+    };
+    function start() {
+      say(''); heard = false; failed = false;
+      base = ta.value.replace(/\s+$/, ''); base = base ? base + ' ' : '';
+      try {
+        rec = new SR(); rec.lang = 'en-US'; rec.continuous = true; rec.interimResults = true; rec.maxAlternatives = 1;
+        rec.onresult = (e) => {
+          const parts = [];
+          for (let i = 0; i < e.results.length; i++) { const t = (e.results[i][0]?.transcript || '').trim(); if (t) parts.push(t); }
+          let t = parts.join(' '); if (!t) return;
+          heard = true;
+          if (!base || /[.!?]\s$/.test(base)) t = t[0].toUpperCase() + t.slice(1);
+          const full = base + t, out = clamp(full);
+          ta.value = out;
+          if (full.length > MAX_DESC) { say('That\'s the length limit. You can edit the text or call us for more.'); stopDictation(); }
+        };
+        rec.onerror = (e) => { if (e.error === 'aborted') return; failed = true; say(MSG[e.error] || "Voice typing didn't work. Please type below.", true); };
+        rec.onend = () => { ui(false); if (!heard && !failed) say(MSG['no-speech'], true); };
+        rec.start(); ui(true);
+      } catch { ui(false); say("Voice typing didn't start. Please type below.", true); }
+    }
+    stopDictation = () => { if (rec && listening) { try { rec.stop(); } catch {} } ui(false); };
+    btn.addEventListener('click', () => (listening ? stopDictation() : start()));
+    ta.addEventListener('input', (e) => { if (listening && e.isTrusted) stopDictation(); }); // typing by hand takes over
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopDictation(); });
+  })();
+
   // ---------- submit ----------
   function showErr(msg) { const a = $('form-alert'); a.textContent = msg; a.hidden = !msg; }
   function fieldErrors(fields = {}) {
@@ -171,7 +227,8 @@
   function validate(form) {
     const v = (n) => form.elements[n].value.trim(), e = {};
     if (v('name').length < 2) e.name = 'Enter your name.';
-    if (v('phone').replace(/\D/g, '').length < 10) e.phone = 'Enter a phone number with area code.';
+    if (!v('phone')) e.phone = 'Phone number is required so we can reach you about your appointment.';
+    else if (v('phone').replace(/\D/g, '').length < 10) e.phone = 'Enter a phone number with area code (at least 10 digits).';
     if (v('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))) e.email = 'Enter a valid email or leave it blank.';
     if (!/^(19|20)\d{2}$/.test(v('vehicleYear'))) e.vehicleYear = 'Choose the year.';
     if (!picked('vehicleMake', 'vehicleMakeOther')) e.vehicleMake = $('vehicleMake').value === OTHER ? 'Type the make.' : 'Choose the make.';
@@ -181,7 +238,7 @@
   }
 
   $('book-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
+    e.preventDefault(); stopDictation();
     const form = e.target; showErr('');
     if (!state.date || !state.time) { showErr('Please pick a day and time first.'); return; }
     const errs = validate(form); fieldErrors(errs);
