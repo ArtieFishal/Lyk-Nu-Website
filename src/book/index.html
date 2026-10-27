@@ -44,9 +44,10 @@
             <div class="f"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required><div class="err"></div></div>
             <div class="f full"><label for="email">Email <span class="opt">(optional)</span></label><input id="email" name="email" type="email" autocomplete="email"><div class="err"></div></div>
             <div class="three">
-              <div class="f"><label for="vehicleYear">Year</label><input id="vehicleYear" name="vehicleYear" inputmode="numeric" maxlength="4" placeholder="2019" required><div class="err"></div></div>
-              <div class="f"><label for="vehicleMake">Make</label><input id="vehicleMake" name="vehicleMake" placeholder="Ford" required><div class="err"></div></div>
-              <div class="f"><label for="vehicleModel">Model</label><input id="vehicleModel" name="vehicleModel" placeholder="F-150" required><div class="err"></div></div>
+              <div class="f"><label for="vehicleYear">Year</label><select id="vehicleYear" name="vehicleYear" required autocomplete="off"><option value="">Select year</option></select><div class="err"></div></div>
+              <div class="f"><label for="vehicleMake">Make</label><input id="vehicleMake" name="vehicleMake" list="make-list" placeholder="Start typing, e.g. Ford" autocomplete="off" autocapitalize="words" spellcheck="false" required><datalist id="make-list"></datalist><div class="err"></div></div>
+              <div class="f"><label for="vehicleModel">Model</label><input id="vehicleModel" name="vehicleModel" list="model-list" placeholder="Pick a make first, or type it" autocomplete="off" autocapitalize="words" spellcheck="false" required><datalist id="model-list"></datalist><div class="err"></div></div>
+              <p class="muted fine-print vehicle-hint">Don't see yours? Choose <strong>Other</strong> or just type it in.</p>
             </div>
             <div class="f full"><label for="insurance">Insurance company <span class="opt">(optional — if filing a claim)</span></label><input id="insurance" name="insurance"><div class="err"></div></div>
             <div class="f full"><label for="description">What happened? Describe the damage or problem</label><textarea id="description" name="description" required placeholder="e.g. Rear-ended at a stop light. Rear bumper pushed in, trunk won't close."></textarea><div class="err"></div></div>
@@ -85,6 +86,7 @@
   </div>
 </main>
 {{> footer}}
+<script src="/js/vehicles.js?v={{BUILD}}" defer></script>
 <script src="/js/book.js?v={{BUILD}}" defer></script>
 </body>
 </html>

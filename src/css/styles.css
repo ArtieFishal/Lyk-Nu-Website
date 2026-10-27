@@ -307,10 +307,13 @@ a.insurer-link:hover::after{opacity:1}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .form-grid .full{grid-column:1/-1}
 .form-grid .three{display:grid;grid-template-columns:.7fr 1fr 1fr;gap:1rem;grid-column:1/-1}
-@media (max-width:600px){.form-grid{grid-template-columns:1fr}.form-grid .three{grid-template-columns:1fr 1fr}.form-grid .three .f:first-child{grid-column:1/-1}}
+@media (max-width:600px){.form-grid{grid-template-columns:1fr}.form-grid .three{grid-template-columns:1fr;gap:.9rem}}
+.form-grid .three .vehicle-hint{grid-column:1/-1;margin:-.3rem 0 0}
 .f label{display:block;font-weight:700;font-size:.9rem;margin-bottom:.3rem}
 .f label .opt{font-weight:500;color:var(--steel)}
 .f input,.f textarea,.f select{width:100%;padding:.8rem .9rem;border:1.5px solid #d5dae0;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+.f select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5l6 6 6-6' fill='none' stroke='%230a48a0' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right .95rem center;padding-right:2.4rem}
+.f input,.f select{min-height:52px;font-size:1rem}
 .f input:focus,.f textarea:focus,.f select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(215,31,38,.15)}
 .f textarea{min-height:120px;resize:vertical}
 .f .err{color:var(--red);font-size:.85rem;font-weight:600;margin-top:.25rem;display:none}
@@ -365,7 +368,7 @@ a.insurer-link:hover::after{opacity:1}
 .appt.canceled{opacity:.55}
 .appt.canceled .time{text-decoration:line-through;color:var(--steel)}
 .appt .photos{display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap}
-.appt .photos img{width:70px;height:70px;object-fit:cover;border-radius:6px;cursor:zoom-in}
+.appt .photos img{width:84px;height:84px;object-fit:cover;border-radius:6px;cursor:zoom-in}
 @media (max-width:640px){.appt{grid-template-columns:1fr}}
 .hours-edit{width:100%;border-collapse:collapse}
 .hours-edit th,.hours-edit td{padding:.55rem .4rem;border-bottom:1px solid var(--line);text-align:left;font-size:.95rem}

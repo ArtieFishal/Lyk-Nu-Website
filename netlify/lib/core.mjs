@@ -235,16 +235,78 @@ export function verifyToken(req) {
   return got.length === expect.length && crypto.timingSafeEqual(got, expect);
 }
 
+// ---------- vehicle ----------
+const vclean = (v, max) => String(v ?? '').replace(/[\u0000-\u001f\u007f<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+// Accepts { vehicleYear, vehicleMake, vehicleModel } (current form) or a legacy single `vehicle` string
+// like "2015 Nissan Altima". Returns sanitized parts plus per-field errors.
+export function parseVehicle(input = {}, now = new Date()) {
+  let year = vclean(input.vehicleYear, 4), make = vclean(input.vehicleMake, 40), model = vclean(input.vehicleModel, 60);
+  if (!year && !make && !model && input.vehicle) {
+    const m = vclean(input.vehicle, 110).match(/^((?:19|20)\d{2})\s+(\S+)(?:\s+(.+))?$/);
+    if (m) { year = m[1]; make = vclean(m[2], 40); model = vclean(m[3] || '', 60); }
+  }
+  const errors = {};
+  const maxYear = now.getFullYear() + 2;
+  if (!/^\d{4}$/.test(year) || Number(year) < 1900 || Number(year) > maxYear) errors.vehicleYear = 'Choose the vehicle year.';
+  if (!make) errors.vehicleMake = 'Choose or type the vehicle make.';
+  if (!model) errors.vehicleModel = 'Choose or type the vehicle model.';
+  return { year, make, model, label: `${year} ${make} ${model}`.trim(), errors };
+}
+
+// ---------- signed photo links (used in notification emails) ----------
+// A link is /api/photo?key=...&exp=...&sig=..., where sig = HMAC(secret, key + exp).
+// Anyone holding the link can view that one photo until it expires; nothing is guessable.
+const PHOTO_KEY_RE = /^\d{4}-\d{2}-\d{2}\/[A-F0-9]+\/\d+$/;
+export const isPhotoKey = (k) => typeof k === 'string' && PHOTO_KEY_RE.test(k);
+const photoSig = (key, exp) => {
+  const k = authKey();
+  return k ? crypto.createHmac('sha256', k).update('photo:' + key + ':' + exp).digest('base64url') : null;
+};
+export function signedPhotoPath(key, days = 30, now = Date.now()) {
+  if (!isPhotoKey(key)) return null;
+  const exp = String(now + days * 864e5);
+  const sig = photoSig(key, exp);
+  return sig ? `/api/photo?key=${encodeURIComponent(key)}&exp=${exp}&sig=${sig}` : null;
+}
+export function verifyPhotoLink(key, exp, sig, now = Date.now()) {
+  if (!isPhotoKey(key) || !/^\d+$/.test(String(exp || '')) || Number(exp) < now || typeof sig !== 'string') return false;
+  const want = photoSig(key, String(exp));
+  if (!want) return false;
+  const a = Buffer.from(sig), b = Buffer.from(want);
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
 // ---------- optional email (Resend) ----------
-export async function sendEmail({ to, subject, text, replyTo }) {
+export const MAX_EMAIL_ATTACH_BYTES = 20 * 1024 * 1024; // Resend allows ~40MB per email incl. base64; stay well under
+const EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/heic': 'heic', 'image/heif': 'heif' };
+// photos: [{ type, data: ArrayBuffer|Buffer|Uint8Array }] -> Resend attachments [{ filename, content (base64), content_type }]
+export function buildAttachments(photos = [], prefix = 'damage-photo', maxBytes = MAX_EMAIL_ATTACH_BYTES) {
+  const out = []; let total = 0;
+  photos.forEach((p, i) => {
+    const buf = Buffer.from(p.data);
+    if (!buf.length || total + buf.length > maxBytes) return;
+    total += buf.length;
+    out.push({ filename: `${prefix}-${i + 1}.${EXT[p.type] || 'jpg'}`, content: buf.toString('base64'), content_type: EXT[p.type] ? p.type : 'image/jpeg' });
+  });
+  return out;
+}
+export function buildEmailPayload({ from, to, subject, text, replyTo, attachments }) {
+  return {
+    from, to: Array.isArray(to) ? to : [to], subject, text,
+    ...(replyTo ? { reply_to: replyTo } : {}),
+    ...(attachments && attachments.length ? { attachments } : {}),
+  };
+}
+export async function sendEmail({ to, subject, text, replyTo, attachments }) {
   const key = process.env.RESEND_API_KEY, from = process.env.NOTIFY_FROM;
   if (!key || !from || !to) return { skipped: true };
   try {
-    const r = await fetch('https://api.resend.com/emails', {
+    const r = await fetch(process.env.RESEND_API_URL || 'https://api.resend.com/emails', {
       method: 'POST',
       headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
-      body: JSON.stringify({ from, to: Array.isArray(to) ? to : [to], subject, text, ...(replyTo ? { reply_to: replyTo } : {}) }),
+      body: JSON.stringify(buildEmailPayload({ from, to, subject, text, replyTo, attachments })),
     });
+    if (!r.ok) console.error('email send failed', r.status, await r.text().catch(() => ''));
     return { ok: r.ok, status: r.status };
   } catch (e) {
     console.error('email failed', e);

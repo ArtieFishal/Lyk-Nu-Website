@@ -28,7 +28,8 @@ The shop's *posted* hours (Mon–Fri 8–5) are text in that file. The hours cus
 * **Closed on major holidays:** New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving and Christmas can't be booked. These use the *actual* calendar date (no "observed" Friday/Monday shift). On `/admin/` → My availability the owner can turn the rule off or mark a specific holiday "Open anyway".
 * Customers only see available slots. Closed days, blocked time, slots that are too soon, and slots that are already full can't be picked.
 * The server re-checks every booking. Writes use compare-and-swap, so two people can't grab the same slot even if they submit at the same moment.
-* Customers can attach up to 4 photos. The browser shrinks them before upload.
+* Customers can attach up to 4 photos (the browser shrinks them before upload). Photos are stored privately, shown as thumbnails on the `/admin/` appointment, **attached to the notification email**, and also linked from it with expiring signed links (`/api/photo`, 30 days).
+* The booking form's **Year** is a dropdown; **Make** and **Model** are type-ahead lists built from a static list in `src/js/vehicles.js` (no outside lookups). "Other" or just typing anything works. To add a make or model, edit that file. The server accepts and cleans year/make/model (or an old single `vehicle` string).
 * Optional email notices go through [Resend](https://resend.com) (see DEPLOY.md). Without it, appointments still show up on `/admin/`.
 
 ## Developer notes

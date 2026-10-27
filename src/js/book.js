@@ -120,6 +120,34 @@
     e.target.value = ''; renderThumbs();
   });
 
+  // ---------- vehicle: year select + make/model lists (static data in vehicles.js) ----------
+  (function vehicleFields() {
+    const OTHER = 'Other (type it in)';
+    const data = window.LYKNU_VEHICLES || {};
+    const yearSel = $('vehicleYear'), make = $('vehicleMake'), model = $('vehicleModel');
+    const thisYear = new Date().getFullYear();
+    for (let y = thisYear + 1; y >= 1980; y--) { const o = document.createElement('option'); o.value = o.textContent = y; yearSel.appendChild(o); }
+    const fill = (list, items) => { list.innerHTML = ''; items.concat(OTHER).forEach((v) => { const o = document.createElement('option'); o.value = v; list.appendChild(o); }); };
+    const makes = Object.keys(data);
+    fill($('make-list'), makes);
+    const find = (v) => makes.find((m) => m.toLowerCase() === v.trim().toLowerCase());
+    function refreshModels() {
+      const m = find(make.value);
+      fill($('model-list'), m ? data[m] : []);
+      model.placeholder = m ? 'Start typing or pick from the list' : 'Type the model';
+    }
+    function other(input, ph) { if (input.value === OTHER) { input.value = ''; input.placeholder = ph; setTimeout(() => input.focus(), 0); return true; } return false; }
+    make.addEventListener('input', () => {
+      if (other(make, 'Type the make')) { refreshModels(); return; }
+      const m = find(make.value);
+      if (m && make.value !== m) make.value = m; // normalise case
+      refreshModels();
+    });
+    make.addEventListener('blur', () => { const m = find(make.value); if (m) make.value = m; refreshModels(); });
+    model.addEventListener('input', () => { other(model, 'Type the model'); });
+    refreshModels();
+  })();
+
   // ---------- submit ----------
   function showErr(msg) { const a = $('form-alert'); a.textContent = msg; a.hidden = !msg; }
   function fieldErrors(fields = {}) {
@@ -137,9 +165,9 @@
     if (v('name').length < 2) e.name = 'Enter your name.';
     if (v('phone').replace(/\D/g, '').length < 10) e.phone = 'Enter a phone number with area code.';
     if (v('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))) e.email = 'Enter a valid email or leave it blank.';
-    if (!/^(19|20)\d{2}$/.test(v('vehicleYear'))) e.vehicleYear = 'Enter the year.';
-    if (!v('vehicleMake')) e.vehicleMake = 'Enter the make.';
-    if (!v('vehicleModel')) e.vehicleModel = 'Enter the model.';
+    if (!/^(19|20)\d{2}$/.test(v('vehicleYear'))) e.vehicleYear = 'Choose the year.';
+    if (!v('vehicleMake') || v('vehicleMake').startsWith('Other')) e.vehicleMake = 'Choose or type the make.';
+    if (!v('vehicleModel') || v('vehicleModel').startsWith('Other')) e.vehicleModel = 'Choose or type the model.';
     if (v('description').length < 5) e.description = 'Briefly describe the damage or problem.';
     return e;
   }

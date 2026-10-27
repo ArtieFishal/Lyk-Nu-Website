@@ -78,6 +78,7 @@ All of this takes effect immediately; there's no need to redeploy.
 Without this, bookings still show up on `/admin/`. To also get an email:
 1. Create a free account at https://resend.com and verify the domain you'll send from (e.g. lyknu.com). Resend shows the DNS records to add.
 Emails are sent only when `RESEND_API_KEY` and `NOTIFY_FROM` are set.
+
 2. Add these environment variables in Netlify, then redeploy:
 
 | Key | Example |
@@ -86,6 +87,8 @@ Emails are sent only when `RESEND_API_KEY` and `NOTIFY_FROM` are set.
 | `NOTIFY_FROM` | `Lyk-Nu Website <bookings@lyknu.com>` |
 | `NOTIFY_TO` | Who gets new-booking emails. Optional: defaults to `notifyEmail` in `business.config.json` (mikefreeman@lyknu.com). Comma-separate for several. |
 | `NOTIFY_CUSTOMER` | `true` to also email the customer a confirmation (optional) |
+
+**Photos in the email:** each customer photo (up to 4, 1.5 MB each, 20 MB cap overall) is attached to Mike's notification as `damage-<id>-N.jpg`, and the email also lists a link per photo. Those links are signed with `ADMIN_PASSWORD` + `SESSION_SECRET`, work for 30 days, and show only that one photo; changing either secret invalidates old links. The photos stay viewable any time in `/admin/` under the appointment.
 
 ---
 

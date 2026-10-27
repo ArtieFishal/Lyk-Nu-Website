@@ -1,5 +1,5 @@
 // End-to-end API tests. Run against a local `netlify dev` (default) or any deploy:
-//   ADMIN_PASSWORD=... BASE=http://localhost:8888 node tests/api.test.mjs
+//   ADMIN_PASSWORD=... SESSION_SECRET=... BASE=http://localhost:8888 node tests/api.test.mjs   (secrets = same values the server uses)
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
@@ -46,7 +46,7 @@ await t('validation rejects bad input with field errors (400)', async () => {
   assert.ok(r.body.fields.phone && r.body.fields.vehicleYear && r.body.fields.description);
 });
 
-let apptId;
+let apptId, photoKey;
 await t('booking an open slot succeeds (with photo upload)', async () => {
   const jpg = fs.readFileSync(new URL('../src/assets/img/og-image.jpg', import.meta.url));
   const r = await book(D1, '10:00', {}, jpg);
@@ -165,7 +165,7 @@ await t('admin settings include upcoming holidays and persist the holiday rule',
 await t('owner sees appointment details + photo; cancel frees the slot', async () => {
   const list = (await admin(`appointments?from=${D1}&to=${D1}`)).body.appointments;
   const ap = list.find((x) => x.id === apptId); assert.ok(ap, 'appointment listed');
-  assert.equal(ap.vehicleMake, 'Ford'); assert.equal(ap.photos.length, 1);
+  assert.equal(ap.vehicleMake, 'Ford'); assert.equal(ap.photos.length, 1); photoKey = ap.photos[0];
   const ph = await admin('photo?key=' + encodeURIComponent(ap.photos[0])); assert.equal(ph.status, 200); assert.ok(ph.body.byteLength > 1000);
   token = ''; assert.equal((await admin('photo?key=' + encodeURIComponent(ap.photos[0]))).status, 401);
   token = (await admin('login', { method: 'POST', body: JSON.stringify({ password: PW }) })).body.token;
@@ -176,6 +176,88 @@ await t('owner sees appointment details + photo; cancel frees the slot', async (
 await t('public availability never exposes customer data', async () => {
   const txt = await (await fetch(`${BASE}/api/availability?start=${D2}&days=1`)).text();
   assert.ok(!/Racer|555-0100|example\.com/.test(txt));
+});
+
+
+// ---------- photos in the notification email + signed links ----------
+const core = await import('../netlify/lib/core.mjs');
+
+await t('email payload attaches photos as base64 with filenames (Resend format)', async () => {
+  const jpg = fs.readFileSync(new URL('../src/assets/img/og-image.jpg', import.meta.url));
+  const att = core.buildAttachments([{ type: 'image/jpeg', data: jpg }, { type: 'image/png', data: Buffer.from('abc') }], 'damage-ABC');
+  assert.equal(att.length, 2);
+  assert.deepEqual(att.map((a) => a.filename), ['damage-ABC-1.jpg', 'damage-ABC-2.png']);
+  assert.equal(att[0].content, jpg.toString('base64')); assert.equal(att[1].content_type, 'image/png');
+  const p = core.buildEmailPayload({ from: 'a@b.co', to: 'm@x.co', subject: 's', text: 't', replyTo: 'c@d.co', attachments: att });
+  assert.deepEqual(p.to, ['m@x.co']); assert.equal(p.reply_to, 'c@d.co'); assert.equal(p.attachments.length, 2);
+  assert.ok(Object.keys(p.attachments[0]).every((k) => ['filename', 'content', 'content_type'].includes(k)));
+  assert.equal(JSON.parse(JSON.stringify(p)).attachments[0].content, att[0].content);
+});
+
+await t('email payload omits attachments when there are no photos', async () => {
+  const p = core.buildEmailPayload({ from: 'a@b.co', to: ['m@x.co'], subject: 's', text: 't', attachments: [] });
+  assert.ok(!('attachments' in p) && !('reply_to' in p));
+});
+
+await t('attachments are capped so the email stays under the size limit', async () => {
+  const big = Buffer.alloc(900); // pretend sizes via a tiny cap
+  const att = core.buildAttachments([1, 2, 3, 4].map(() => ({ type: 'image/jpeg', data: big })), 'x', 2000);
+  assert.equal(att.length, 2);
+  assert.ok(core.MAX_EMAIL_ATTACH_BYTES <= 20 * 1024 * 1024);
+  assert.equal(core.buildAttachments([{ type: 'image/jpeg', data: Buffer.alloc(0) }]).length, 0);
+});
+
+await t('signed photo links verify, expire, and reject tampering', async () => {
+  const key = '2030-01-02/ABCDEF123456/1';
+  const path = core.signedPhotoPath(key, 30); assert.ok(path.startsWith('/api/photo?key='));
+  const q = new URL('http://x' + path).searchParams;
+  assert.ok(core.verifyPhotoLink(q.get('key'), q.get('exp'), q.get('sig')));
+  assert.ok(!core.verifyPhotoLink(q.get('key'), q.get('exp'), q.get('sig') + 'x'));
+  assert.ok(!core.verifyPhotoLink('2030-01-02/ABCDEF123456/2', q.get('exp'), q.get('sig')));
+  assert.ok(!core.verifyPhotoLink(q.get('key'), q.get('exp'), q.get('sig'), Number(q.get('exp')) + 1));
+  assert.equal(core.signedPhotoPath('../etc/passwd'), null);
+});
+
+await t('/api/photo serves a photo for a valid signed link only', async () => {
+  const path = core.signedPhotoPath(photoKey);
+  const ok = await fetch(BASE + path); assert.equal(ok.status, 200); assert.match(ok.headers.get('content-type'), /^image\//);
+  assert.ok((await ok.arrayBuffer()).byteLength > 1000);
+  assert.equal((await fetch(BASE + path.replace(/sig=./, 'sig=Z'))).status, 403);
+  assert.equal((await fetch(`${BASE}/api/photo?key=${encodeURIComponent(photoKey)}`)).status, 403);
+});
+
+// ---------- vehicle year / make / model ----------
+await t('vehicle parser: new fields, legacy single string, and sanitizing', async () => {
+  assert.equal(core.parseVehicle({ vehicleYear: '2015', vehicleMake: 'Nissan', vehicleModel: 'Altima' }).label, '2015 Nissan Altima');
+  assert.equal(core.parseVehicle({ vehicle: '2015 Nissan Altima SV' }).label, '2015 Nissan Altima SV');
+  const dirty = core.parseVehicle({ vehicleYear: ' 2015 ', vehicleMake: ' <b>Ni\u0000ssan</b> ', vehicleModel: 'Alti   ma' });
+  assert.ok(!/[<>\u0000]/.test(dirty.label)); assert.equal(dirty.model, 'Alti ma');
+  assert.ok(core.parseVehicle({ vehicleYear: '1850', vehicleMake: 'Ford', vehicleModel: 'T' }).errors.vehicleYear);
+  assert.ok(core.parseVehicle({ vehicleYear: String(new Date().getFullYear() + 5), vehicleMake: 'Ford', vehicleModel: 'T' }).errors.vehicleYear);
+  const e = core.parseVehicle({}).errors; assert.ok(e.vehicleYear && e.vehicleMake && e.vehicleModel);
+});
+
+await t('booking accepts a custom ("Other") make/model and a legacy single vehicle string', async () => {
+  const days = (await avail(D3, 1)).days[0];
+  const t1 = days.slots[days.slots.length - 1], t2 = days.slots[days.slots.length - 6];
+  const r1 = await book(D3, t1, { vehicleYear: '1987', vehicleMake: 'Studebaker', vehicleModel: 'Avanti', name: 'Other Maker' });
+  assert.equal(r1.status, 200, JSON.stringify(r1.body));
+  const fd = new FormData();
+  for (const [k, v] of Object.entries({ date: D3, time: t2, name: 'Legacy Client', phone: '4235550101', vehicle: '2015 Nissan Altima', description: 'Door ding on the left side.' })) fd.set(k, v);
+  const r2 = await fetch(`${BASE}/api/book`, { method: 'POST', body: fd }); assert.equal(r2.status, 200, await r2.text());
+  const list = (await admin(`appointments?from=${D3}&to=${D3}`)).body.appointments;
+  const a = list.find((x) => x.name === 'Other Maker'), b = list.find((x) => x.name === 'Legacy Client');
+  assert.equal(`${a.vehicleYear} ${a.vehicleMake} ${a.vehicleModel}`, '1987 Studebaker Avanti');
+  assert.equal(`${b.vehicleYear} ${b.vehicleMake} ${b.vehicleModel}`, '2015 Nissan Altima');
+  for (const x of [a, b]) await admin(`appointments/${D3}/${x.id}/cancel`, { method: 'POST' });
+});
+
+await t('static vehicle list covers common makes and has no duplicates', async () => {
+  const src = fs.readFileSync(new URL('../src/js/vehicles.js', import.meta.url), 'utf8');
+  const data = JSON.parse(src.slice(src.indexOf('{'), src.lastIndexOf('}') + 1));
+  for (const m of ['Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Dodge', 'Ram', 'Jeep', 'GMC', 'Hyundai', 'Kia', 'Subaru', 'Mazda', 'Volkswagen', 'BMW', 'Mercedes-Benz', 'Audi', 'Buick', 'Cadillac', 'Chrysler', 'Lincoln', 'Mitsubishi', 'Volvo', 'Lexus', 'Acura', 'Infiniti', 'Tesla']) assert.ok(data[m]?.length >= 3, m);
+  for (const [m, list] of Object.entries(data)) assert.equal(new Set(list).size, list.length, 'dupes in ' + m);
+  assert.ok(data.Ford.includes('F-150') && data.Nissan.includes('Altima') && data.Chevrolet.includes('Silverado 1500'));
 });
 
 // cleanup the race-test booking
