@@ -3,7 +3,7 @@
 A static website with a built-in online estimate scheduler, running on Netlify (Functions + Blobs). There is no database to manage and no monthly software fee.
 
 * **Public site:** `/` home, `/book/` schedule an estimate (`/estimate` redirects there)
-* **Owner page:** `/admin/` sets weekly hours, slot length and notice time, blocks out days or hours off, and lets him view or cancel appointments and see customers' damage photos
+* **Owner page:** `/admin/` is for the owner only and is **not linked anywhere on the public site** (type the address to reach it). He uses it to see appointments (and damage photos), to **block off time when he won't be at the shop**, and to set his **estimate availability windows**. It does not change the shop's posted hours
 * **Our Work gallery:** real Lyk-Nu shop photos with a tap-to-enlarge viewer, plus a before/after of a two-tone Chevy pickup
 * **👉 Deploying:** see **[DEPLOY.md](DEPLOY.md)** (written for non-developers). Drag-and-drop deploys will **not** work because the booking system needs Netlify Functions.
 * **Image credits and which photo is used where:** see **[CREDITS.md](CREDITS.md)**
@@ -21,12 +21,13 @@ A static website with a built-in online estimate scheduler, running on Netlify (
 
 ## Changing business info
 Edit **`business.config.json`** (phone, address, hours text, reviews, services, etc.), then redeploy. A value that starts with `TODO` is a placeholder: it stays hidden on the site, and the build prints a warning for it.
-That file also holds the towing note (24/7), holiday note, walk-in wording, warranty line, insurance list (text only, no logos) and the default booking-notification email (`notifyEmail`).
-Booking hours are **not** set in that file. The owner sets them on `/admin/`, and the public calendar follows them immediately.
+That file also holds the towing note (24/7), holiday note, appointment wording, warranty line (paint only), insurance list (text only, no logos; each entry is `{"name": ..., "url": ...}` and links to the insurer's own site) and the default booking-notification email (`notifyEmail`).
+The shop's *posted* hours (Mon–Fri 8–5) are text in that file. The hours customers can **book estimates** are separate: the owner sets those as "estimate availability windows" on `/admin/`, and the public calendar follows them immediately.
 
 ## How booking works
-* Estimates are 20 minutes each, one car at a time (the owner can change both on `/admin/`). Walk-ins are welcome; booking guarantees a time.
-* Customers only see open slots. Closed days, blocked time, slots that are too soon, and slots that are already full can't be picked.
+* Estimates are 20 minutes each, one car at a time (the owner can change both on `/admin/`). The owner does estimates himself, so the site steers customers to book an appointment ("See availability") to meet him on a schedule that suits them.
+* **Closed on major holidays:** New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving and Christmas can't be booked. These use the *actual* calendar date (no "observed" Friday/Monday shift). On `/admin/` → My availability the owner can turn the rule off or mark a specific holiday "Open anyway".
+* Customers only see available slots. Closed days, blocked time, slots that are too soon, and slots that are already full can't be picked.
 * The server re-checks every booking. Writes use compare-and-swap, so two people can't grab the same slot even if they submit at the same moment.
 * Customers can attach up to 4 photos. The browser shrinks them before upload.
 * Optional email notices go through [Resend](https://resend.com) (see DEPLOY.md). Without it, appointments still show up on `/admin/`.
@@ -36,7 +37,7 @@ Booking hours are **not** set in that file. The owner sets them on `/admin/`, an
 npm install
 export ADMIN_PASSWORD=choose-one SESSION_SECRET=random-string
 npm run dev            # builds src/ -> public/ and runs netlify dev on :8888
-ADMIN_PASSWORD=choose-one BASE=http://localhost:8888 npm test   # 16 end-to-end API tests
+ADMIN_PASSWORD=choose-one BASE=http://localhost:8888 npm test   # 19 end-to-end API tests
 ```
 * `src/` holds templates (`{{config.x}}`, `{{> partial}}`, `{{i:icon}}`); `scripts/build.mjs` renders them into `public/`.
 * `netlify/functions/`: `availability.mjs`, `book.mjs`, `admin.mjs`; shared logic is in `netlify/lib/core.mjs`.

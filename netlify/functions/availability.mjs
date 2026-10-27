@@ -21,7 +21,7 @@ export default async (req) => {
     const date = addDays(start, i);
     const r = computeSlots(date, settings, blocks, dayDocs[date] || [], now);
     // Public API never reveals who booked; only whether a slot can be booked.
-    out.push({ date, open: r.open && r.slots.some((s) => s.available), slots: r.slots.filter((s) => s.available).map((s) => s.time) });
+    out.push({ date, open: r.open && r.slots.some((s) => s.available), slots: r.slots.filter((s) => s.available).map((s) => s.time), ...(r.holiday ? { holiday: r.holiday } : {}) });
   }
   return json({
     today: now.date,

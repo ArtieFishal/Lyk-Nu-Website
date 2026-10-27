@@ -91,7 +91,7 @@
   async function loadBlocks() {
     const { blocks } = await api('blocks');
     const box = $('blocks');
-    if (!blocks.length) { box.innerHTML = '<p class="muted" style="margin:0">Nothing blocked. All weekly hours are open for booking.</p>'; return; }
+    if (!blocks.length) { box.innerHTML = '<p class="muted m0">Nothing blocked. Your whole availability is open for booking.</p>'; return; }
     box.innerHTML = '';
     for (const b of blocks) {
       const dates = b.endDate && b.endDate !== b.startDate ? `${fmtDate(b.startDate, { weekday: 'short', month: 'short', day: 'numeric' })} – ${fmtDate(b.endDate, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}` : fmtDate(b.startDate, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
@@ -119,7 +119,7 @@
   }));
 
   // ---------- settings ----------
-  let tz = 'America/New_York';
+  let tz = 'America/New_York', holidays = [];
   function renderHours(s) {
     const tb = $('hours-body'); tb.innerHTML = '';
     for (const d of ORDER) {
@@ -134,12 +134,21 @@
       tr.querySelector('.h-open').onchange = (e) => tr.classList.toggle('closed', !e.target.checked);
       tb.appendChild(tr);
     }
+    $('s-hol').checked = s.closeMajorHolidays !== false;
+    const hl = $('hol-list'); hl.innerHTML = '';
+    for (const h of holidays) {
+      const lab = document.createElement('label'); lab.className = 'toggle hol-item';
+      const open = (s.openHolidayDates || []).includes(h.date);
+      lab.innerHTML = `<input type="checkbox" class="hol-open" data-date="${h.date}" ${open ? 'checked' : ''}> <span><strong>${h.name}</strong> <span class="muted">${new Date(h.date + 'T12:00:00Z').toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span></span><em>Open anyway</em>`;
+      hl.appendChild(lab);
+    }
+    hl.hidden = !holidays.length;
     $('s-slot').value = String(s.slotMinutes);
     if (!$('s-slot').value) { const o = new Option(s.slotMinutes, s.slotMinutes); $('s-slot').add(o); $('s-slot').value = String(s.slotMinutes); }
     $('s-cap').value = s.capacityPerSlot; $('s-notice').value = s.minNoticeHours; $('s-ahead').value = s.maxDaysAhead; $('s-msg').value = s.bookingMessage || '';
   }
   async function loadSettings() {
-    const r = await api('settings'); tz = r.timezone; today = r.today; $('tz').textContent = r.timezone;
+    const r = await api('settings'); tz = r.timezone; today = r.today; holidays = r.holidays || []; $('tz').textContent = r.timezone;
     $('b-start').value = $('b-start').value || today; $('b-start').min = today; $('b-end').min = today;
     renderHours(r.settings);
   }
@@ -153,7 +162,7 @@
       weekly[tr.dataset.day] = { open: q('.h-o').value, close: q('.h-c').value, breakStart: q('.h-bs').value, breakEnd: q('.h-be').value };
     }
     try {
-      const { settings } = await api('settings', { method: 'PUT', body: JSON.stringify({ weekly, slotMinutes: $('s-slot').value, capacityPerSlot: $('s-cap').value, minNoticeHours: $('s-notice').value, maxDaysAhead: $('s-ahead').value, bookingMessage: $('s-msg').value }) });
+      const { settings } = await api('settings', { method: 'PUT', body: JSON.stringify({ weekly, slotMinutes: $('s-slot').value, capacityPerSlot: $('s-cap').value, minNoticeHours: $('s-notice').value, maxDaysAhead: $('s-ahead').value, bookingMessage: $('s-msg').value, closeMajorHolidays: $('s-hol').checked, openHolidayDates: [...document.querySelectorAll('.hol-open:checked')].map((c) => c.dataset.date) }) });
       renderHours(settings); toast('Saved — the booking page is updated');
     } catch (x) { toast(x.message); }
   });

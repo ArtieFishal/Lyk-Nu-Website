@@ -1,19 +1,16 @@
 {
-  "_README": "Edit this ONE file to change business facts shown on the website, then redeploy. Any value starting with 'TODO' is a placeholder that could not be verified online; the build prints a warning for each. Leave a value as an empty string or [] to hide that item. Booking hours are NOT set here; the owner sets them on the /admin page.",
-
+  "_README": "Edit this ONE file to change business facts shown on the website, then redeploy. Any value starting with 'TODO' is a placeholder that could not be verified online; the build prints a warning for each. Leave a value as an empty string or [] to hide that item. The public shop hours shown on the site come from hoursDisplay below. Estimate availability (the times customers can book) and time off are set by the owner on the /admin page, not here.",
   "name": "Lyk-Nu Auto Collision & Service Center",
   "legalName": "Lyk-Nu Auto Collision & Service Center, Inc.",
   "shortName": "Lyk-Nu",
-  "tagline": "Collision repair, paint, full-service mechanic shop, 24/7 towing, jump starts & lockouts in LaFollette, TN",
+  "tagline": "Collision repair, paint, full-service mechanic shop, 24/7 towing and roadside help in LaFollette, TN",
   "foundedYear": 1968,
   "familyOwned": true,
   "owner": "Mike Freeman",
-
   "phone": "(423) 562-5156",
   "phoneE164": "+14235625156",
   "fax": "(423) 562-3369",
   "email": "MikeFreeman@lyknu.com",
-
   "address": {
     "street": "1534 Old Jacksboro Hwy",
     "city": "La Follette",
@@ -22,28 +19,46 @@
     "zip": "37766",
     "country": "US"
   },
-  "geo": { "lat": 36.360966, "lng": -84.142533 },
-  "serviceArea": ["LaFollette", "Jacksboro", "Caryville", "Jellico", "Campbell County"],
-
-  "hoursDisplay": [
-    { "days": "Monday – Friday", "hours": "8:00 AM – 5:00 PM" },
-    { "days": "Saturday – Sunday", "hours": "Closed" }
+  "geo": {
+    "lat": 36.360966,
+    "lng": -84.142533
+  },
+  "serviceArea": [
+    "LaFollette",
+    "Jacksboro",
+    "Caryville",
+    "Jellico",
+    "Campbell County"
   ],
-  "hoursSchema": ["Mo-Fr 08:00-17:00"],
-  "towing": { "available247": true, "phone": "(423) 562-5156", "phoneE164": "+14235625156" },
+  "hoursDisplay": [
+    {
+      "days": "Monday – Friday",
+      "hours": "8:00 AM – 5:00 PM"
+    },
+    {
+      "days": "Saturday – Sunday",
+      "hours": "Closed"
+    }
+  ],
+  "hoursSchema": [
+    "Mo-Fr 08:00-17:00"
+  ],
+  "towing": {
+    "available247": true,
+    "phone": "(423) 562-5156",
+    "phoneE164": "+14235625156"
+  },
   "towingNote": "24/7 towing — call (423) 562-5156 any time, day or night.",
-  "holidayNote": "Open on holidays unless otherwise posted - call to confirm.",
-  "walkInNote": "Walk-ins welcome",
-  "walkInDetail": "or schedule an estimate to guarantee your time",
-  "warranty": "Limited Lifetime Warranty",
+  "holidayNote": "Closed on major holidays.",
+  "appointmentNote": "Appointments preferred",
+  "appointmentDetail": "Meet the owner and get your estimate on a schedule that works for you.",
+  "warranty": "Limited Lifetime Warranty on paint",
   "notifyEmail": "mikefreeman@lyknu.com",
-
   "social": {
     "facebook": "https://www.facebook.com/310492218940",
     "google": "https://www.google.com/maps/search/?api=1&query=Lyk-Nu+Auto+Collision+1534+Old+Jacksboro+Hwy+La+Follette+TN+37766",
     "yelp": "https://www.yelp.com/biz/lyk-nu-auto-collision-and-service-center-la-follette"
   },
-
   "rating": {
     "value": 4.5,
     "count": 93,
@@ -51,13 +66,43 @@
     "asOf": "October 2026",
     "show": true
   },
-
-  "insurancePartners": ["State Farm", "Farm Bureau", "Progressive", "Erie", "Allstate", "Geico", "Auto-Owners", "Safeco"],
+  "insurancePartners": [
+    {
+      "name": "State Farm",
+      "url": "https://www.statefarm.com/"
+    },
+    {
+      "name": "Farm Bureau",
+      "url": "https://www.fbitn.com/"
+    },
+    {
+      "name": "Progressive",
+      "url": "https://www.progressive.com/"
+    },
+    {
+      "name": "Erie",
+      "url": "https://www.erieinsurance.com/"
+    },
+    {
+      "name": "Allstate",
+      "url": "https://www.allstate.com/"
+    },
+    {
+      "name": "Geico",
+      "url": "https://www.geico.com/"
+    },
+    {
+      "name": "Auto-Owners",
+      "url": "https://www.auto-owners.com/"
+    },
+    {
+      "name": "Safeco",
+      "url": "https://www.safeco.com/"
+    }
+  ],
   "insuranceNote": "Once your claim number is issued, we handle the claim process for you.",
   "certifications": [],
-
   "usdot": "624512",
-
   "reviews": [
     {
       "text": "They are honest, trustworthy and their prices left me eternally grateful. My son was in town and his car broke down. They were there so fast, I have never in my life seen a tow truck with such a rapid response... They did a great job and had his car running by the very next day.",

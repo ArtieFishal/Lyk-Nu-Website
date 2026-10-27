@@ -32,6 +32,8 @@ const ICONS = {
   glass: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 7.5C6 5.8 9 5 12 5s6 .8 9 2.5l-1.6 8.6A2 2 0 0 1 17.4 18H6.6a2 2 0 0 1-2-1.9zm4.5 1.6-1 1 3.4 3.4 1-1zm4.5-.6-1 1 4.4 4.4 1-1z"/></svg>',
   camera: '<svg width="30" height="30" viewBox="0 0 24 24" fill="#5b6573" aria-hidden="true"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>',
   fb: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>',
+  home: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg>',
+  truck: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 6h11v4h3.5l3.5 4v4h-2a2.5 2.5 0 0 1-5 0H10a2.5 2.5 0 0 1-5 0H3zm14 5v3h2.7L17.5 11zM7.5 17a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>',
   star: '★',
 };
 
@@ -55,6 +57,8 @@ const socialLinks = [
   val(social.yelp) && `<a href="${esc(social.yelp)}" target="_blank" rel="noopener">Yelp</a>`,
 ].filter(Boolean);
 const email = val(cfg.email);
+// insurance partners may be plain names or { name, url }
+const insurers = (cfg.insurancePartners || []).map((x) => (typeof x === 'string' ? { name: x } : x)).filter((x) => x && x.name && !isTodo(x.name));
 
 // ---------- JSON-LD ----------
 const ld = {
@@ -62,7 +66,7 @@ const ld = {
   '@type': ['AutoBodyShop', 'AutoRepair'],
   name: cfg.name,
   legalName: cfg.legalName || undefined,
-  description: `Family owned and operated since ${cfg.foundedYear}. Collision repair, auto body and paint, full-service mechanic shop, 24/7 towing, jump starts, lockout service in ${a.displayCity || a.city}, Tennessee. Walk-ins welcome.`,
+  description: `Family owned and operated since ${cfg.foundedYear}. Collision repair, auto body and paint, full-service mechanic shop, 24/7 towing, jumpstarts, lockouts and other roadside help in ${a.displayCity || a.city}, Tennessee. Appointments preferred.`,
   telephone: cfg.phoneE164 || cfg.phone,
   faxNumber: val(cfg.fax) || undefined,
   email: email || undefined,
@@ -77,12 +81,13 @@ const ld = {
     '@type': 'OfferCatalog',
     name: 'Services',
     itemListElement: [
-      ['Collision repair', 'Collision repair for passenger and commercial vehicles.'],
+      ['Collision repair', 'Collision repair for passenger vehicles and small commercial vehicles.'],
       ['Auto body and paint', 'Body and fender work, straightening and refinishing.'],
       ['Mechanical repair', 'Full-service mechanic shop: general mechanical repair and computer diagnostics.'],
       ...(cfg.towing && cfg.towing.available247 ? [['24/7 towing', 'Towing and road service, available 24 hours a day, 7 days a week.']] : [['Towing and road service', 'Light-duty and rollback towing.']]),
       ['Jump starts', 'Jump-start service for vehicles with a dead battery.'],
       ['Lockout service', 'Unlocking vehicle doors for people locked out of their car.'],
+      ['Roadside assistance', 'Jumpstarts, lockouts and other customer service requests from our tow truck. Just ask.'],
       ['Insurance claim repairs', 'We work with insurance claims and handle the claim process once the claim number is issued.'],
     ].map(([n, d]) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: n, description: d, areaServed: 'Campbell County, TN' } })),
   },
@@ -105,16 +110,16 @@ const blocks = {
   ABS: SITE,
   HOURS_SHORT: esc((cfg.hoursDisplay?.[0] ? `${cfg.hoursDisplay[0].days.replace('Monday – Friday', 'Mon–Fri')} ${cfg.hoursDisplay[0].hours}` : '')),
   HOURS_TABLE: `<table class="hours-table">${hoursRows}</table>`,
-  HOURS_TABLE_DARK: `<table class="hours-table" style="color:#e7eaee">${hoursRows}</table>`,
+  HOURS_TABLE_DARK: `<table class="hours-table on-dark">${hoursRows}</table>`,
   RATING: showRating ? `<div class="rating-summary"><span class="big">${esc(r.value)}</span><div><div class="stars">${stars(r.value)}</div><div class="muted">${esc(r.count)} ${esc(r.source)} reviews${r.asOf ? ` (as of ${esc(r.asOf)})` : ''}</div></div></div>` : '',
   HERO_RATING: showRating ? `<div><strong>${esc(r.value)} <span class="stars" style="font-size:1.2rem">★</span></strong>${esc(r.count)} ${esc(r.source)} reviews</div>` : '',
   REVIEWS: reviewsHtml,
   REVIEW_LINK: val(social.google) ? `<a href="${esc(social.google)}" target="_blank" rel="noopener">Read all reviews on Google →</a>` : '',
   JSONLD: jsonld,
   CANONICAL: '', // set per page below
-  SOCIAL_LINKS: socialLinks.length ? `<p style="display:flex;gap:1rem;flex-wrap:wrap">${socialLinks.join('')}</p>` : '',
-  INSURANCE_LIST: (cfg.insurancePartners || []).filter((x) => !isTodo(x)).map((x) => `<li>${esc(x)}</li>`).join(''),
-  INSURANCE_SENTENCE: (() => { const l = (cfg.insurancePartners || []).filter((x) => !isTodo(x)); return esc(l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l.at(-1) : (l[0] || '')); })(),
+  SOCIAL_LINKS: socialLinks.length ? `<p class="social-links">${socialLinks.join('')}</p>` : '',
+  INSURANCE_LIST: insurers.map((x) => `<li>${x.url ? `<a class="insurer-link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.name)}<span class="sr-only"> (official website, opens in a new tab)</span></a>` : `<span class="insurer-link">${esc(x.name)}</span>`}</li>`).join(''),
+  INSURANCE_SENTENCE: (() => { const l = insurers.map((x) => x.name); return esc(l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l.at(-1) : (l[0] || '')); })(),
   TOWING_NOTE: val(cfg.towingNote) ? `<div><dt>Towing</dt><dd><strong>24/7</strong> — <a href="tel:${esc((cfg.towing && cfg.towing.phoneE164) || cfg.phoneE164)}">${esc((cfg.towing && cfg.towing.phone) || cfg.phone)}</a>, any time, day or night.</dd></div>` : '',
   HOLIDAY_NOTE: val(cfg.holidayNote) ? `<p class="hours-note">${esc(cfg.holidayNote)}</p>` : '',
   MAP_SRC: `https://maps.google.com/maps?q=${geo ? encodeURIComponent(geo) + '+(' + encodeURIComponent(cfg.name) + ')' : mapQuery}&z=15&output=embed`,
@@ -123,7 +128,7 @@ const blocks = {
   EMAIL_DD: email ? `<div><dt>Email</dt><dd><a href="mailto:${esc(email)}">${esc(email)}</a></dd></div>` : '',
   EMAIL_LINE: email ? `<br><a href="mailto:${esc(email)}">${esc(email)}</a>` : '',
   FAX_LINE: val(cfg.fax) ? `<br>Fax: ${esc(cfg.fax)}` : '',
-  USDOT_LINE: val(cfg.usdot) ? `USDOT ${esc(cfg.usdot)} · ` : '',
+  USDOT_LINE: val(cfg.usdot) ? `USDOT ${esc(cfg.usdot)}` : '',
   FOOTER_BLURB: esc(`Family owned and operated since ${cfg.foundedYear}. Collision repair, paint & body, a full-service mechanic shop and 24/7 towing in ${a.displayCity || a.city}, Tennessee.`),
 };
 

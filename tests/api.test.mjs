@@ -93,6 +93,24 @@ await t('built-in defaults: 20-minute estimates, 1 car per slot, notify email fr
   assert.equal(core.DEFAULT_NOTIFY_TO, 'mikefreeman@lyknu.com');
 });
 
+await t('major holidays: dates are right, shop is closed, admin can override', async () => {
+  const core = await import('../netlify/lib/core.mjs');
+  const h = Object.fromEntries(core.majorHolidays(2026).map((x) => [x.name, x.date]));
+  assert.deepEqual(h, { "New Year's Day": '2026-01-01', 'Memorial Day': '2026-05-25', 'Independence Day': '2026-07-04', 'Labor Day': '2026-09-07', 'Thanksgiving Day': '2026-11-26', 'Christmas Day': '2026-12-25' });
+  assert.equal(core.majorHolidays(2027).find((x) => x.name === 'Thanksgiving Day').date, '2027-11-25');
+  assert.equal(core.majorHolidays(2027).find((x) => x.name === 'Memorial Day').date, '2027-05-31');
+  const now = { date: '2026-11-01', minutes: 0 };
+  const base = structuredClone(core.DEFAULT_SETTINGS);
+  const r = core.computeSlots('2026-11-26', base, [], [], now);          // Thanksgiving (a Thursday)
+  assert.equal(r.open, false); assert.equal(r.reason, 'holiday'); assert.equal(r.holiday, 'Thanksgiving Day');
+  assert.ok(core.computeSlots('2026-11-25', base, [], [], now).slots.length > 8, 'day before is open');
+  const ov = core.sanitizeSettings({ openHolidayDates: ['2026-11-26', '2026-11-27'] }, base);   // 11-27 is not a holiday: dropped
+  assert.deepEqual(ov.openHolidayDates, ['2026-11-26']);
+  assert.ok(core.computeSlots('2026-11-26', ov, [], [], now).open, 'owner override opens the holiday');
+  const off = core.sanitizeSettings({ closeMajorHolidays: false }, base);
+  assert.ok(core.computeSlots('2026-11-26', off, [], [], now).open, 'turning the holiday rule off opens it');
+});
+
 await t('correct admin password returns a working token', async () => {
   const r = await admin('login', { method: 'POST', body: JSON.stringify({ password: PW }) });
   assert.equal(r.status, 200); token = r.body.token;
@@ -131,6 +149,17 @@ await t('changing weekly hours updates availability (close a weekday, change slo
   const s = (await avail(D3)).days[0].slots; assert.ok(s.includes('09:00') && !s.includes('09:20'));
   await admin('settings', { method: 'PUT', body: JSON.stringify(orig) });
   assert.ok((await avail(D3)).days[0].slots.includes('09:20'));
+});
+
+await t('admin settings include upcoming holidays and persist the holiday rule', async () => {
+  const g = (await admin('settings')).body;
+  assert.ok(Array.isArray(g.holidays) && g.holidays.length >= 6 && g.holidays[0].name);
+  assert.equal(g.settings.closeMajorHolidays, true);
+  const orig = g.settings;
+  const put = (await admin('settings', { method: 'PUT', body: JSON.stringify({ closeMajorHolidays: false, openHolidayDates: [g.holidays[0].date] }) })).body.settings;
+  assert.equal(put.closeMajorHolidays, false); assert.deepEqual(put.openHolidayDates, [g.holidays[0].date]);
+  await admin('settings', { method: 'PUT', body: JSON.stringify({ closeMajorHolidays: true, openHolidayDates: [] }) });
+  assert.equal((await admin('settings')).body.settings.closeMajorHolidays, true);
 });
 
 await t('owner sees appointment details + photo; cancel frees the slot', async () => {

@@ -25,6 +25,8 @@ export const DEFAULT_SETTINGS = {
     5: { open: '08:00', close: '17:00', breakStart: '', breakEnd: '' },
     6: null,
   },
+  closeMajorHolidays: true, // customers can't book on major US holidays (the shop is closed)
+  openHolidayDates: [],     // specific holiday dates (YYYY-MM-DD) the owner chose to open anyway
   bookingMessage: '',       // optional notice shown on the booking page
 };
 
@@ -62,6 +64,31 @@ export function shopNow(now = new Date()) {
   return { date: `${parts.year}-${parts.month}-${parts.day}`, minutes: Number(parts.hour) * 60 + Number(parts.minute) };
 }
 
+// ---------- major holidays (shop is closed) ----------
+const pad = (n) => String(n).padStart(2, '0');
+/** Date of the nth (1-based) weekday `wd` (0=Sun) in a month, or the last one when n === -1. */
+function nthWeekday(y, m, wd, n) {
+  if (n > 0) { const first = new Date(Date.UTC(y, m - 1, 1)).getUTCDay(); return 1 + ((wd - first + 7) % 7) + (n - 1) * 7; }
+  const last = new Date(Date.UTC(y, m, 0)); return last.getUTCDate() - ((last.getUTCDay() - wd + 7) % 7);
+}
+/** The shop's closed holidays for a year: New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving, Christmas. */
+export function majorHolidays(y) {
+  return [
+    { date: `${y}-01-01`, name: "New Year's Day" },
+    { date: `${y}-05-${pad(nthWeekday(y, 5, 1, -1))}`, name: 'Memorial Day' },
+    { date: `${y}-07-04`, name: 'Independence Day' },
+    { date: `${y}-09-${pad(nthWeekday(y, 9, 1, 1))}`, name: 'Labor Day' },
+    { date: `${y}-11-${pad(nthWeekday(y, 11, 4, 4))}`, name: 'Thanksgiving Day' },
+    { date: `${y}-12-25`, name: 'Christmas Day' },
+  ];
+}
+export const majorHolidayName = (date) => (isDate(date) ? majorHolidays(Number(date.slice(0, 4))).find((h) => h.date === date)?.name : undefined) || '';
+/** Holidays from `fromDate` forward, for the admin page. */
+export function upcomingHolidays(fromDate, count = 8) {
+  const y = Number(fromDate.slice(0, 4));
+  return [y, y + 1, y + 2].flatMap(majorHolidays).filter((h) => h.date >= fromDate).slice(0, count);
+}
+
 export function sanitizeSettings(input, base = DEFAULT_SETTINGS) {
   const s = structuredClone(base);
   if (!input || typeof input !== 'object') return s;
@@ -70,6 +97,8 @@ export function sanitizeSettings(input, base = DEFAULT_SETTINGS) {
   if ('capacityPerSlot' in input) s.capacityPerSlot = int(input.capacityPerSlot, 1, 20, s.capacityPerSlot);
   if ('minNoticeHours' in input) s.minNoticeHours = int(input.minNoticeHours, 0, 168, s.minNoticeHours);
   if ('maxDaysAhead' in input) s.maxDaysAhead = int(input.maxDaysAhead, 1, 365, s.maxDaysAhead);
+  if ('closeMajorHolidays' in input) s.closeMajorHolidays = input.closeMajorHolidays === true || input.closeMajorHolidays === 'true';
+  if (Array.isArray(input.openHolidayDates)) s.openHolidayDates = [...new Set(input.openHolidayDates.filter((d) => majorHolidayName(d)))].sort().slice(0, 24);
   if ('bookingMessage' in input) s.bookingMessage = String(input.bookingMessage || '').slice(0, 500);
   if (input.weekly && typeof input.weekly === 'object') {
     for (let d = 0; d < 7; d++) {
@@ -146,6 +175,8 @@ export function computeSlots(date, settings, blocks, appts, now = shopNow()) {
   if (!day) return { open: false, reason: 'closed', slots: [] };
   if (date < now.date) return { open: false, reason: 'past', slots: [] };
   if (date > addDays(now.date, settings.maxDaysAhead)) return { open: false, reason: 'too-far', slots: [] };
+  const holiday = majorHolidayName(date);
+  if (holiday && settings.closeMajorHolidays !== false && !(settings.openHolidayDates || []).includes(date)) return { open: false, reason: 'holiday', holiday, slots: [] };
   const len = settings.slotMinutes;
   const ranges = blockedRanges(date, blocks);
   if (ranges.some(([a, b]) => a <= toMin(day.open) && b >= toMin(day.close))) return { open: false, reason: 'blocked', slots: [] };

@@ -65,10 +65,10 @@ The password is **never written in the website's code**. It lives only in Netlif
 ---
 
 ## Using the owner page
-Go to `https://YOUR-SITE/admin/` (there's also a small "Staff login" link at the bottom of every page) and enter the password.
+Go to `https://YOUR-SITE/admin/` (there is deliberately **no link** to it on the public site, so bookmark it) and enter the password.
 * **Appointments:** upcoming estimate appointments, with the customer's phone, vehicle, damage description and photos. Use **Cancel** to free up a slot. Call the customer to let them know.
-* **Time off / Blocks:** block a whole day or a range of hours, for example "Out of town" or "Supplier meeting". Customers can't book those times. There are quick buttons for "Block rest of today" and "Block tomorrow".
-* **Hours & settings:** open and close times for each day of the week, appointment length (e.g. 30 min), how many cars per time slot, the minimum notice (e.g. 2 hours), and how far ahead people can book.
+* **Block off time:** use this when you won't be at the shop: a whole day or a range of hours, for example "Out of town" or "Supplier meeting". Customers can't book those times. (This does not change the shop's posted hours.) There are quick buttons for "Block rest of today" and "Block tomorrow".
+* **My availability:** your *estimate availability windows* (the hours each day you're available to do estimates, with an optional break), estimate length (e.g. 20 min), how many cars per time slot, the minimum notice (e.g. 2 hours), and how far ahead people can book. Also a **Major holidays** section: the shop is closed on major holidays by default; tick "Open anyway" to take bookings on a particular one.
 
 All of this takes effect immediately; there's no need to redeploy.
 
@@ -106,4 +106,4 @@ Business details (phone, hours shown on the page, address, reviews, services) ar
 Anything that starts with `TODO` is a placeholder that couldn't be confirmed online. It stays hidden until you fill it in.
 
 ## Before going live: please confirm with the owner
-See the "Please confirm" list in the hand-off notes. Still open: exact Facebook and Google page links, certifications, and keeping the review rating current. (Towing is 24/7, hours are Mon–Fri 8–5 with no Saturday hours, and the service area and insurance list are confirmed.)
+See the "Please confirm" list in the hand-off notes. Still open: exact Facebook and Google page links, certifications, and keeping the review rating current. (Towing is 24/7 with jumpstarts, lockouts and other roadside help; shop hours are Mon–Fri 8–5, closed on major holidays; the Limited Lifetime Warranty applies to paint only; commercial work is small commercial vehicles only.) Insurance names link to each company's own public website; these are not endorsements and the site says so.

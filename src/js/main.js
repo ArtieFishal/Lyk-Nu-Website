@@ -30,3 +30,17 @@
   let x0 = null; box.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
   box.addEventListener('touchend', (e) => { if (x0 == null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 50) show(i + (d < 0 ? 1 : -1)); x0 = null; });
 })();
+
+// header shadow on scroll + restrained scroll reveal (skipped for reduced motion)
+(() => {
+  const h = document.querySelector('.site-header');
+  if (h) { const f = () => h.classList.toggle('scrolled', window.scrollY > 8); f(); window.addEventListener('scroll', f, { passive: true }); }
+  const sel = '.section-head,.service,.trust-item,.chip,.about-grid>*,.step,.review,.g-item,.insurance>*,.contact-grid>*,.rating-summary,.steps-cta,.work-cta';
+  const els = [...document.querySelectorAll(sel)];
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!els.length || calm || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+  els.forEach((el, i) => { el.classList.add('reveal'); el.style.setProperty('--d', ((i % 4) * 0.06) + 's'); io.observe(el); });
+  // safety net: never leave content hidden
+  setTimeout(() => els.forEach((el) => el.classList.add('in')), 6000);
+})();

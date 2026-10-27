@@ -30,8 +30,17 @@ The Lyk-Nu logo is the shop's own artwork, supplied by the shop owner's team (or
 
 | File (`src/assets/img/logo/`) | Derived from | Used in |
 |---|---|---|
-| `lyknu-wordmark-400/800 .webp/.png` | Wordmark | Site header (all pages) and admin page header |
-| `lyknu-logo-full-600/1200 .webp/.png` | Full logo with tagline | Footer (on a white plate), schema.org `logo` (1200 PNG) |
+| `lyknu-logo-full-600/1200 .webp/.png` | Full logo with tagline | Header (all pages, on white), admin header, footer (on a white plate), schema.org `logo` (1200 PNG) |
+| `lyknu-wordmark-400/800 .webp/.png` | Wordmark | Not currently used on pages (kept for reuse) |
 | `favicon-32.png`, `favicon-192.png`, `apple-touch-icon.png`, `/favicon.ico` | Letters of the wordmark stacked as "LYK / NU" on white | Browser tab icon, home-screen icon |
 | `../og-image.jpg` | Full logo over a blurred-dark shop photo | Link preview (Facebook, iMessage, etc.) |
 | `images/logo-transparent/*.png` (not published on the site) | Full-resolution transparent cutouts | Reuse (print, signage, social) |
+
+## Fonts (self-hosted, no third-party requests)
+| Font | Files (`src/assets/fonts/`) | License |
+|---|---|---|
+| Barlow Condensed (600, 700, 800), by Jeremy Tribby | `barlow-condensed-latin-*-normal.woff2` | [SIL Open Font License 1.1](https://openfontlicense.org), via [Fontsource](https://fontsource.org) |
+| Inter (variable), by Rasmus Andersson | `inter-latin-wght-normal.woff2` | [SIL Open Font License 1.1](https://openfontlicense.org), via [Fontsource](https://fontsource.org) |
+
+## Insurance company links
+The insurance names on the home page link to each company's official public website. They are text links only (no logos or trademarks are used) and the site states that Lyk-Nu is not affiliated with or endorsed by those companies.

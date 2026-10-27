@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import {
-  json, isDate, isTime, toMin, shopNow, addDays, store, uploadStore, getSettings, getBlocks, getDay,
+  json, isDate, upcomingHolidays, isTime, toMin, shopNow, addDays, store, uploadStore, getSettings, getBlocks, getDay,
   casUpdate, sanitizeSettings, DEFAULT_SETTINGS, checkPassword, makeToken, verifyToken, TZ,
 } from '../lib/core.mjs';
 
@@ -27,7 +27,7 @@ export default async (req) => {
   if (!verifyToken(req)) return json({ error: 'Please log in.' }, 401);
 
   // ----- settings -----
-  if (route === 'settings' && m === 'GET') return json({ settings: await getSettings(), timezone: TZ, today: shopNow().date });
+  if (route === 'settings' && m === 'GET') { const today = shopNow().date; return json({ settings: await getSettings(), timezone: TZ, today, holidays: upcomingHolidays(today, 8) }); }
   if (route === 'settings' && m === 'PUT') {
     const input = await body(req);
     const s = sanitizeSettings(input, await getSettings());

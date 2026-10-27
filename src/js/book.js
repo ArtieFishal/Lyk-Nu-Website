@@ -36,8 +36,9 @@
       const date = ymd(y, m, d), info = state.days[date];
       const b = document.createElement('button'); b.type = 'button'; b.textContent = d; b.dataset.date = date;
       const ok = info && info.open && info.slots.length;
-      if (ok) { b.className = 'avail'; b.setAttribute('aria-label', `${fmtDate(date)}, ${info.slots.length} open times`); }
-      else { b.disabled = true; b.setAttribute('aria-label', `${fmtDate(date)}, unavailable`); }
+      if (info && info.holiday) { b.className = 'holiday'; b.title = `Closed: ${info.holiday}`; }
+      if (ok) { b.className = 'avail'; b.setAttribute('aria-label', `${fmtDate(date)}, ${info.slots.length} times available`); }
+      else { b.disabled = true; b.setAttribute('aria-label', `${fmtDate(date)}, ${info && info.holiday ? 'closed for ' + info.holiday : 'unavailable'}`); }
       if (date === state.today) b.classList.add('today');
       if (date === state.date) b.classList.add('selected');
       b.addEventListener('click', () => selectDate(date));
@@ -57,9 +58,9 @@
   function renderSlots() {
     const box = $('slots'); box.innerHTML = '';
     const info = state.date && state.days[state.date];
-    if (!info) { $('slot-hint').textContent = 'Select a day above to see open times.'; return; }
-    if (!info.slots.length) { $('slot-hint').textContent = 'No open times left on this day. Please pick another day.'; return; }
-    $('slot-hint').textContent = `Open times on ${fmtDate(state.date)}:`;
+    if (!info) { $('slot-hint').textContent = 'Select a day above to see availability.'; return; }
+    if (!info.slots.length) { $('slot-hint').textContent = 'Nothing left available on this day. Please pick another day.'; return; }
+    $('slot-hint').textContent = `Available times on ${fmtDate(state.date)}:`;
     for (const t of info.slots) {
       const b = document.createElement('button'); b.type = 'button'; b.textContent = fmtTime(t); b.dataset.time = t;
       b.setAttribute('role', 'option');

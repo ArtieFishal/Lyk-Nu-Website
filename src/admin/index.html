@@ -9,7 +9,7 @@
 <div class="admin-top">
   <div class="container">
     <a class="brand" href="/"><picture><source type="image/webp" srcset="/assets/img/logo/lyknu-logo-full-600.webp 1x, /assets/img/logo/lyknu-logo-full-1200.webp 2x"><img class="brand-logo" src="/assets/img/logo/lyknu-logo-full-600.png" srcset="/assets/img/logo/lyknu-logo-full-600.png 1x, /assets/img/logo/lyknu-logo-full-1200.png 2x" alt="Lyk-Nu Auto Collision &amp; Service Center" width="159" height="46"></picture><span class="brand-sub admin-label">Shop Admin</span></a>
-    <button class="btn btn-ghost" id="logout" hidden style="padding:.5rem 1rem">Log out</button>
+    <button class="btn btn-outline btn-sm" id="logout" hidden>Log out</button>
   </div>
 </div>
 
@@ -18,72 +18,76 @@
     <h2>Owner login</h2>
     <div class="f"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
     <div id="login-err" class="alert error" hidden></div>
-    <button class="btn btn-red" style="width:100%;margin-top:1rem" type="submit">Log in</button>
+    <button class="btn btn-red btn-block mt-md" type="submit">Log in</button>
   </form>
 
   <div id="app" hidden>
     <div class="tabs" role="tablist">
       <button class="active" data-tab="appts">Appointments</button>
-      <button data-tab="blocks">Time off / Block times</button>
-      <button data-tab="hours">Hours &amp; settings</button>
+      <button data-tab="blocks">Block off time</button>
+      <button data-tab="hours">My availability</button>
     </div>
 
-    <section class="tab active" id="tab-appts" style="padding:0 0 3rem">
-      <div class="row" style="justify-content:space-between;align-items:center">
-        <h2 style="margin:0">Upcoming estimates</h2>
+    <section class="tab active" id="tab-appts">
+      <div class="row row-between">
+        <h2 class="m0">Upcoming estimates</h2>
         <label class="toggle"><input type="checkbox" id="show-canceled"> Show canceled</label>
       </div>
       <div id="appts"></div>
     </section>
 
-    <section class="tab" id="tab-blocks" style="padding:0 0 3rem">
+    <section class="tab" id="tab-blocks">
       <div class="panel">
-        <h2>Block off time</h2>
-        <p class="muted">Days or hours you won't be at the shop. Customers can't book these times. Takes effect immediately.</p>
+        <h2>Block off time when I'm not at the shop</h2>
+        <p class="muted">Use this when you'll be away: a day off, a doctor visit, vacation. Customers can't book estimates during blocked time. It takes effect immediately and does not change the shop's posted hours.</p>
         <form id="block-form">
           <div class="row">
             <div class="f"><label for="b-start">From date</label><input type="date" id="b-start" required></div>
             <div class="f"><label for="b-end">To date <span class="opt">(same day if blank)</span></label><input type="date" id="b-end"></div>
           </div>
-          <label class="toggle" style="margin:1rem 0"><input type="checkbox" id="b-allday" checked> All day</label>
+          <label class="toggle my-md"><input type="checkbox" id="b-allday" checked> All day</label>
           <div class="row" id="b-times" hidden>
             <div class="f"><label for="b-st">From time</label><input type="time" id="b-st" value="12:00"></div>
             <div class="f"><label for="b-et">To time</label><input type="time" id="b-et" value="17:00"></div>
           </div>
-          <div class="row" style="margin-top:1rem">
+          <div class="row mt-md">
             <div class="f"><label for="b-reason">Note <span class="opt">(only you see this)</span></label><input id="b-reason" placeholder="Vacation, appointment, etc."></div>
             <button class="btn btn-red" type="submit">Block this time</button>
           </div>
-          <div class="row" style="margin-top:.8rem;gap:.5rem">
+          <div class="row mt-sm">
             <button type="button" class="btn btn-outline" data-quick="today">Block rest of today</button>
             <button type="button" class="btn btn-outline" data-quick="tomorrow">Block tomorrow</button>
           </div>
         </form>
       </div>
       <div class="panel">
-        <h2>Blocked times</h2>
+        <h2>Time I'm away</h2>
         <div id="blocks"></div>
       </div>
     </section>
 
-    <section class="tab" id="tab-hours" style="padding:0 0 3rem">
+    <section class="tab" id="tab-hours">
       <form class="panel" id="settings-form">
-        <h2>Weekly estimate hours</h2>
-        <p class="muted">When customers can book estimates each week. Uncheck a day to close it.</p>
+        <h2>Estimate availability windows</h2>
+        <p class="muted">The hours you're available to do estimates each week. Customers can only book inside these windows. This is <strong>not</strong> the shop's posted operating hours (those are on the public site). Uncheck a day if you don't do estimates then.</p>
         <table class="hours-edit">
-          <thead><tr><th>Day</th><th>Open?</th><th>Start</th><th>End</th><th>Break from</th><th>Break to</th></tr></thead>
+          <thead><tr><th>Day</th><th>Available?</th><th>From</th><th>Until</th><th>Break from</th><th>Break to</th></tr></thead>
           <tbody id="hours-body"></tbody>
         </table>
-        <h2 style="margin-top:2rem">Booking rules</h2>
+        <h2 class="mt-lg">Major holidays</h2>
+        <p class="muted">The shop is closed on major holidays, so customers can't book them. Tick "Open anyway" only for a holiday you will actually be at the shop.</p>
+        <label class="toggle"><input type="checkbox" id="s-hol"> Close on major holidays (recommended)</label>
+        <div id="hol-list" class="hol-list"></div>
+        <h2 class="mt-lg">Booking rules</h2>
         <div class="row">
           <div class="f"><label for="s-slot">Estimate length (minutes)</label><select id="s-slot"><option>15</option><option>20</option><option>30</option><option>45</option><option>60</option><option>90</option><option>120</option></select></div>
           <div class="f"><label for="s-cap">Estimates at the same time</label><input id="s-cap" type="number" min="1" max="20"></div>
           <div class="f"><label for="s-notice">Minimum notice (hours)</label><input id="s-notice" type="number" min="0" max="168"></div>
           <div class="f"><label for="s-ahead">Book up to (days ahead)</label><input id="s-ahead" type="number" min="1" max="365"></div>
         </div>
-        <div class="f" style="margin-top:1rem"><label for="s-msg">Notice on booking page <span class="opt">(optional)</span></label><input id="s-msg" maxlength="500" placeholder="e.g. We're closed the week of July 4th."></div>
-        <div style="margin-top:1.4rem;display:flex;gap:.6rem;flex-wrap:wrap"><button class="btn btn-red" type="submit">Save settings</button></div>
-        <p class="muted" style="margin-top:1rem;font-size:.9rem">Times are shop time (<span id="tz"></span>). Changing the estimate length doesn't move existing appointments.</p>
+        <div class="f mt-md"><label for="s-msg">Notice on booking page <span class="opt">(optional)</span></label><input id="s-msg" maxlength="500" placeholder="e.g. Mike is out of the shop the week of June 10."></div>
+        <div class="form-actions"><button class="btn btn-red" type="submit">Save availability</button></div>
+        <p class="muted fine-print">Times are shop time (<span id="tz"></span>). Changing the estimate length doesn't move existing appointments.</p>
       </form>
     </section>
   </div>

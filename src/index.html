@@ -3,11 +3,11 @@
 <head>
 {{> head}}
 <title>{{name}} | Collision Repair, Paint & Towing in LaFollette, TN</title>
-<meta name="description" content="Collision repair, paint, mechanic shop, 24/7 towing, jump starts & lockouts in LaFollette, TN. Family owned since {{foundedYear}}. Walk-ins welcome. {{phone}}">
+<meta name="description" content="Collision repair, paint, mechanic shop and 24/7 towing in LaFollette, TN, plus jumpstarts, lockouts and other roadside help. Family owned since {{foundedYear}}. Appointments preferred. {{phone}}">
 {{CANONICAL}}
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{name}} — LaFollette, TN">
-<meta property="og:description" content="Collision repair, auto body & paint, full-service mechanic shop and 24/7 towing. Family owned since {{foundedYear}}. Walk-ins welcome.">
+<meta property="og:description" content="Collision repair, auto body & paint, full-service mechanic shop and 24/7 towing with roadside help. Family owned since {{foundedYear}}. Appointments preferred.">
 <meta property="og:image" content="{{ABS}}/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" as="image" href="/assets/img/hero-shop.webp" imagesrcset="/assets/img/hero-shop-sm.webp 960w, /assets/img/hero-shop.webp 1920w" imagesizes="100vw">
@@ -20,14 +20,14 @@
     <img class="hero-bg" src="/assets/img/hero-shop.webp" srcset="/assets/img/hero-shop-sm.webp 960w, /assets/img/hero-shop.webp 1920w" sizes="100vw" alt="Freshly painted candy-red lifted Ford Excursion inside the Lyk-Nu shop" fetchpriority="high" width="1920" height="1000">
     <div class="container">
       <div class="hero-inner">
-        <span class="eyebrow" style="color:#ff6b70">Family owned &amp; operated since {{foundedYear}}</span>
-        <h1>Back on the road<br>like it never happened.</h1>
-        <p class="lead">Collision repair, auto body &amp; paint, a full-service mechanic shop and 24/7 towing, jump starts and lockout service for passenger and commercial vehicles — right here in {{address.displayCity}}, Tennessee.</p>
+        <span class="eyebrow on-dark">Family owned &amp; operated since {{foundedYear}}</span>
+        <h1>Back on the road<br><span class="h1-accent">like it never happened.</span></h1>
+        <p class="lead">Collision repair, auto body &amp; paint, a full-service mechanic shop and 24/7 towing — plus jumpstarts, lockouts and other roadside help — right here in {{address.displayCity}}, Tennessee.</p>
         <div class="hero-ctas">
-          <a class="btn btn-red" href="/book/">{{i:cal}} Schedule a Free Estimate</a>
-          <a class="btn btn-ghost" href="tel:{{phoneE164}}">{{i:phone}} Call {{phone}}</a>
+          <a class="btn btn-red btn-lg" href="/book/">{{i:cal}} Schedule a Free Estimate</a>
+          <a class="btn btn-ghost btn-lg" href="tel:{{phoneE164}}">{{i:phone}} Call {{phone}}</a>
         </div>
-        <p class="hero-walkin"><strong>{{walkInNote}}</strong> — {{walkInDetail}}.</p>
+        <p class="hero-appt"><strong>{{appointmentNote}}</strong> · {{appointmentDetail}}</p>
         <div class="hero-badges">
           <div><strong>{{YEARS}}+</strong>years serving Campbell County</div>
           {{HERO_RATING}}
@@ -36,16 +36,17 @@
       </div>
     </div>
   </section>
-  <div class="stripe" aria-hidden="true"></div>
+
   <div class="trust-strip" role="list" aria-label="Why choose Lyk-Nu">
     <div class="container">
-      <div role="listitem">{{i:shield}}<span><strong>{{warranty}}</strong></span></div>
-      <div role="listitem">{{i:clock}}<span><strong>24/7 towing</strong> <a href="tel:{{phoneE164}}">{{phone}}</a></span></div>
-      <div role="listitem">{{i:check}}<span><strong>{{walkInNote}}</strong></span></div>
+      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:home}}</span><span class="ti-txt"><strong>Family owned</strong><small>Since {{foundedYear}} in {{address.displayCity}}</small></span></div>
+      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:truck}}</span><span class="ti-txt"><strong>24/7 towing</strong><small><a href="tel:{{phoneE164}}">{{phone}}</a> · roadside help</small></span></div>
+      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:cal}}</span><span class="ti-txt"><strong>{{appointmentNote}}</strong><small>Meet the owner</small></span></div>
+      <div class="trust-item" role="listitem"><span class="ti-ico">{{i:shield}}</span><span class="ti-txt"><strong>Lifetime paint warranty</strong><small>Limited, on paint work</small></span></div>
     </div>
   </div>
 
-  <section id="services" class="bg-light">
+  <section id="services" class="section bg-light">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">What we do</span>
@@ -55,11 +56,11 @@
       <div class="services-grid">
         <article class="service">
           <img src="/assets/img/collision-damage-sm.webp" alt="Red and silver Chevy pickup with its front end torn down for collision repair in the Lyk-Nu shop" loading="lazy" width="600" height="400">
-          <div class="body"><h3>Collision Repair</h3><p>Professional, reliable collision repair for all passenger and commercial vehicles. We restore your vehicle to pre-accident condition.</p></div>
+          <div class="body"><h3>Collision Repair</h3><p>Professional, reliable collision repair for passenger vehicles and small commercial vehicles. We restore your vehicle to pre-accident condition.</p></div>
         </article>
         <article class="service">
           <img src="/assets/img/body-paint-work-sm.webp" alt="Red and silver Chevy pickup after body and paint work by Lyk-Nu" loading="lazy" width="600" height="400">
-          <div class="body"><h3>Auto Body &amp; Paint</h3><p>Body and fender work, straightening, and refinishing — dents, scratches and panels repaired and painted to match.</p></div>
+          <div class="body"><h3>Auto Body &amp; Paint</h3><p>Body and fender work, straightening, and refinishing — dents, scratches and panels repaired and painted to match.</p><p class="pill pill-warranty">{{i:shield}} {{warranty}}</p></div>
         </article>
         <article class="service">
           <img src="/assets/img/mechanical-repair-sm.webp" alt="Mechanic working in an engine bay" loading="lazy" width="600" height="400">
@@ -67,7 +68,7 @@
         </article>
         <article class="service">
           <img src="/assets/img/towing-flatbed-sm.webp" alt="Lyk-Nu rollback tow truck" loading="lazy" width="600" height="400">
-          <div class="body"><h3>Towing &amp; Road Service <span class="tag-247">24/7</span></h3><p>24/7 towing — light-duty and rollback, local and long distance — plus <strong>jump starts</strong> and <strong>lockout service</strong> (we'll unlock your doors if you're locked out) when you're stranded. Call <a href="tel:{{phoneE164}}"><strong>{{phone}}</strong></a> any time.</p></div>
+          <div class="body"><h3>Towing &amp; Road Service <span class="tag-247">24/7</span></h3><p>24/7 towing with rollback and wrecker trucks. Jumpstarts, lockouts, and other roadside help — just ask. Call <a href="tel:{{phoneE164}}"><strong>{{phone}}</strong></a> any time.</p></div>
         </article>
         <article class="service no-img">
           <div class="body">
@@ -82,13 +83,23 @@
           </div>
         </article>
       </div>
-      <div class="chips" aria-label="More services">
-        <span class="chip">Frame straightening</span><span class="chip">Full-service mechanic shop</span><span class="chip">A/C service</span><span class="chip">Brakes</span><span class="chip">Shocks &amp; struts</span><span class="chip">24/7 towing</span><span class="chip">Jump starts</span><span class="chip">Lockout service</span><span class="chip">Vehicle storage</span><span class="chip">Commercial vehicles</span>
-      </div>
+      <ul class="chips" aria-label="More services">
+        <li class="chip">Frame straightening</li>
+        <li class="chip">Full-service mechanic shop</li>
+        <li class="chip">A/C service</li>
+        <li class="chip">Brakes</li>
+        <li class="chip">Shocks &amp; struts</li>
+        <li class="chip">24/7 towing</li>
+        <li class="chip">Jumpstarts</li>
+        <li class="chip">Lockouts</li>
+        <li class="chip">Roadside help — just ask</li>
+        <li class="chip">Vehicle storage</li>
+        <li class="chip">Small commercial vehicles</li>
+      </ul>
     </div>
   </section>
 
-  <section id="about">
+  <section id="about" class="section">
     <div class="container about-grid">
       <div class="about-media">
         <img src="/assets/img/shop-floor.webp" srcset="/assets/img/shop-floor-sm.webp 600w, /assets/img/shop-floor.webp 1200w" sizes="(min-width:900px) 50vw, 100vw" alt="Inside the Lyk-Nu shop: a pickup in for repair on the wide shop floor" loading="lazy" width="1200" height="800">
@@ -97,20 +108,20 @@
       <div>
         <span class="eyebrow">About Lyk-Nu</span>
         <h2>A family shop your neighbors trust</h2>
-        <p>{{legalName}} has been family owned and operated since {{foundedYear}}. We offer professional and reliable collision repair for all passenger and commercial vehicles, and we're experts at restoring your vehicle to pre-accident condition.</p>
+        <p>{{legalName}} has been family owned and operated since {{foundedYear}}. We offer professional and reliable collision repair for passenger vehicles and small commercial vehicles, and we're experts at restoring your vehicle to pre-accident condition.</p>
         <p>Whether you've been in a wreck, need paint and body work, have a mechanical problem, or need a tow at any hour, our team treats you — and your vehicle — like family.</p>
         <ul class="checks">
           <li>{{i:check}}<span><strong>Honest, fair pricing</strong> — customers say it again and again.</span></li>
-          <li>{{i:check}}<span><strong>24/7 towing</strong> with fast response when you're stuck on the road.</span></li>
+          <li>{{i:check}}<span><strong>24/7 towing</strong> and roadside help when you're stuck on the road.</span></li>
           <li>{{i:check}}<span><strong>Body, paint, full-service mechanic &amp; towing</strong> under one roof.</span></li>
-          <li>{{i:check}}<span><strong>{{warranty}}</strong></span></li>
-          <li>{{i:check}}<span><strong>Insurance claims</strong> handled for you.</span></li>
+                    <li>{{i:check}}<span><strong>Insurance claims</strong> handled for you.</span></li>
+          <li>{{i:check}}<span><strong>Meet the owner</strong> from the start — book an appointment and get your estimate on your schedule.</span></li>
         </ul>
       </div>
     </div>
   </section>
 
-  <section id="work" class="bg-light">
+  <section id="work" class="section bg-light">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Our Work</span>
@@ -133,24 +144,24 @@
   </section>
 
 
-  <section class="bg-dark">
+  <section id="how" class="section band-dark slant-both">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">How it works</span>
-        <h2 style="color:#fff">Getting an estimate is easy</h2>
-        <p>Pick a time online — it takes about two minutes. {{walkInNote}}, or schedule an estimate to guarantee your time.</p>
+        <h2>Getting an estimate is easy</h2>
+        <p>Pick a time online — it takes about two minutes. {{appointmentNote}}: {{appointmentDetail}}</p>
       </div>
       <div class="steps">
-        <div class="step"><h3>Pick a time</h3><p>Choose an open day and time that fits your schedule.</p></div>
+        <div class="step"><h3>Pick a time</h3><p>Choose an available day and time that fits your schedule.</p></div>
         <div class="step"><h3>Tell us about it</h3><p>Your vehicle, what happened, and a few photos if you have them.</p></div>
-        <div class="step"><h3>Bring it by</h3><p>Each estimate takes about 20 minutes, one vehicle at a time. We'll look it over and walk you through the repair and your options.</p></div>
+        <div class="step"><h3>Meet the owner</h3><p>Each estimate takes about 20 minutes, one vehicle at a time. We'll look it over and walk you through the repair and your options.</p></div>
         <div class="step"><h3>Drive away happy</h3><p>Quality work, done right, at a fair price.</p></div>
       </div>
-      <p style="margin-top:2rem"><a class="btn btn-red" href="/book/">{{i:cal}} See open times</a></p>
+      <p class="steps-cta"><a class="btn btn-red btn-lg" href="/book/">{{i:cal}} See availability</a></p>
     </div>
   </section>
 
-  <section id="insurance">
+  <section id="insurance" class="section">
     <div class="container insurance">
       <div>
         <span class="eyebrow">Insurance claims</span>
@@ -162,7 +173,7 @@
     </div>
   </section>
 
-  <section id="reviews" class="bg-light">
+  <section id="reviews" class="section bg-light">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Reviews</span>
@@ -178,15 +189,15 @@
 
   <div class="cta-band">
     <div class="container">
-      <div><h2>Been in an accident?</h2><p>{{walkInNote}} — or book a free estimate online to guarantee your time. Towing is available 24/7.</p></div>
-      <div style="display:flex;gap:.7rem;flex-wrap:wrap">
-        <a class="btn btn-light" href="/book/">Book Online</a>
-        <a class="btn btn-ghost" href="tel:{{phoneE164}}">{{phone}}</a>
+      <div><h2>Been in an accident?</h2><p>Book a free estimate online and meet the owner on a schedule that works for you. Towing is available 24/7.</p></div>
+      <div class="cta-actions">
+        <a class="btn btn-light btn-lg" href="/book/">See availability</a>
+        <a class="btn btn-ghost btn-lg" href="tel:{{phoneE164}}">{{phone}}</a>
       </div>
     </div>
   </div>
 
-  <section id="contact">
+  <section id="contact" class="section band-dark slant-top">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Contact</span>
@@ -200,11 +211,11 @@
             <div><dt>Phone</dt><dd><a href="tel:{{phoneE164}}">{{phone}}</a></dd></div>
             {{EMAIL_DD}}
             <div><dt>Hours</dt><dd>{{HOURS_TABLE}}{{HOLIDAY_NOTE}}</dd></div>
-            <div><dt>Walk-ins</dt><dd><strong>{{walkInNote}}</strong> — or <a href="/book/">schedule an estimate</a> to guarantee your time.</dd></div>
+            <div><dt>Estimates</dt><dd><strong>{{appointmentNote}}.</strong> {{appointmentDetail}} <a href="/book/">See availability →</a></dd></div>
             {{TOWING_NOTE}}
           </dl>
-          <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.4rem">
-            <a class="btn btn-red" href="/book/">Book an Estimate</a>
+          <div class="contact-actions">
+            <a class="btn btn-red" href="/book/">See availability</a>
             <a class="btn btn-outline" href="{{DIRECTIONS}}" target="_blank" rel="noopener">Get Directions</a>
           </div>
         </div>

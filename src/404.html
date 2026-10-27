@@ -1,5 +1,12 @@
 <!doctype html>
 <html lang="en"><head>{{> head}}<title>Page not found | {{name}}</title><meta name="robots" content="noindex"></head>
 <body>{{> header}}
-<main id="main" class="container" style="padding:5rem 0;text-align:center"><h1>Page not found</h1><p>Sorry, that page doesn't exist.</p><p><a class="btn btn-red" href="/">Go home</a> <a class="btn btn-outline" href="/book/">Book an estimate</a></p></main>
+<main id="main" class="nf">
+  <div class="container nf-inner">
+    <p class="nf-code" aria-hidden="true">404</p>
+    <h1>Page not found</h1>
+    <p>Sorry, that page doesn't exist. It may have moved, or the link may be mistyped.</p>
+    <p class="nf-actions"><a class="btn btn-red btn-lg" href="/">Go home</a> <a class="btn btn-outline btn-lg" href="/book/">See availability</a></p>
+  </div>
+</main>
 {{> footer}}</body></html>
