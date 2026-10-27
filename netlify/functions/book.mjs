@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import {
   json, isDate, isTime, shopNow, getSettings, getBlocks, casUpdate, computeSlots, uploadStore,
-  sendEmail, fmtDate, fmtTime, BUSINESS_NAME, DEFAULT_NOTIFY_TO, buildAttachments, signedPhotoPath, parseVehicle,
+  sendEmail, fmtDate, fmtTime, BUSINESS_NAME, DEFAULT_NOTIFY_TO, buildAttachments, buildNotificationText, signedPhotoPath, parseVehicle,
 } from '../lib/core.mjs';
 
 const MAX_PHOTOS = 4;
@@ -84,15 +84,15 @@ export default async (req) => {
   if (notify) {
     const origin = process.env.SITE_URL ? process.env.SITE_URL.replace(/\/$/, '') : new URL(req.url).origin;
     const links = photoKeys.map((k, n) => { const p = signedPhotoPath(k); return p ? `  ${n + 1}. ${origin}${p}` : null; }).filter(Boolean);
-    const photoLine = photoKeys.length
-      ? `Photos: ${photoKeys.length} (attached to this email${links.length ? '; backup links below, good for 30 days' : ''})${links.length ? '\n' + links.join('\n') : ''}`
-      : 'Photos: none';
     await sendEmail({
       to: notify.split(',').map((s) => s.trim()),
       replyTo: data.email || undefined,
       subject: `New estimate: ${data.name} — ${when}`,
       attachments: buildAttachments(photoData, `damage-${id}`),
-      text: `New estimate appointment (#${id})\n\nWhen: ${when}\nName: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email || '-'}\nVehicle: ${vehicle}\nInsurance: ${data.insurance || '-'}\n${photoLine}\n\n${data.description}\n\nManage appointments on the /admin page of the website.`,
+      text: buildNotificationText({
+        id, when, name: data.name, phone: data.phone, email: data.email, vehicle, insurance: data.insurance,
+        description: data.description, photoCount: photoKeys.length, links,
+      }),
     });
   }
   if (data.email && process.env.NOTIFY_CUSTOMER === 'true') {

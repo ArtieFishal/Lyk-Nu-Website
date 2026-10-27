@@ -297,6 +297,18 @@ export function buildEmailPayload({ from, to, subject, text, replyTo, attachment
     ...(attachments && attachments.length ? { attachments } : {}),
   };
 }
+/** Body of Mike's new-booking email. Order: heading, When, Name, Phone, Email, Vehicle, Insurance, Description, then Photos + backup links last. */
+export function buildNotificationText({ id, when, name, phone, email, vehicle, insurance, description, photoCount = 0, links = [] }) {
+  const photos = photoCount
+    ? `Photos: ${photoCount} (attached to this email${links.length ? '; backup links below, good for 30 days' : ''})${links.length ? '\n' + links.join('\n') : ''}`
+    : 'Photos: none';
+  return [
+    `New estimate appointment (#${id})`, '',
+    `When: ${when}`, `Name: ${name}`, `Phone: ${phone}`, `Email: ${email || '-'}`, `Vehicle: ${vehicle}`, `Insurance: ${insurance || '-'}`, '',
+    'Description:', description, '',
+    photos,
+  ].join('\n');
+}
 export async function sendEmail({ to, subject, text, replyTo, attachments }) {
   const key = process.env.RESEND_API_KEY, from = process.env.NOTIFY_FROM;
   if (!key || !from || !to) return { skipped: true };

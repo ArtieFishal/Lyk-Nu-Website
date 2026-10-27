@@ -206,6 +206,16 @@ await t('email payload attaches photos as base64 with filenames (Resend format)'
   assert.equal(JSON.parse(JSON.stringify(p)).attachments[0].content, att[0].content);
 });
 
+await t("Mike's email body: description right after Insurance, photos last, no admin reminder", async () => {
+  const txt = core.buildNotificationText({ id: 'ABC123', when: 'Tue, Nov 3 at 9:00 AM', name: 'Jo Smith', phone: '(423) 555-0100', email: '', vehicle: '2018 Ford F-150', insurance: '', description: 'Rear-ended at a light.\nTrunk will not close.', photoCount: 2, links: ['  1. https://x/a', '  2. https://x/b'] });
+  const at = (s) => { const i = txt.indexOf(s); assert.ok(i >= 0, 'missing ' + s); return i; };
+  const order = ['New estimate appointment (#ABC123)', 'When:', 'Name:', 'Phone:', 'Email: -', 'Vehicle:', 'Insurance: -', 'Description:\nRear-ended at a light.\nTrunk will not close.', 'Photos: 2', '1. https://x/a', '2. https://x/b'].map(at);
+  assert.deepEqual(order, [...order].sort((a, b) => a - b), 'fields are in the requested order');
+  assert.ok(!/manage appointments|\/admin/i.test(txt));
+  assert.match(core.buildNotificationText({ id: 'Z', when: 'w', name: 'n', phone: 'p', vehicle: 'v', description: 'd' }), /Description:\nd\n\nPhotos: none$/);
+  for (const f of ['../netlify/functions/book.mjs', '../netlify/lib/core.mjs']) assert.ok(!/Manage appointments/i.test(fs.readFileSync(new URL(f, import.meta.url), 'utf8')), f + ' still has the admin reminder');
+});
+
 await t('email payload omits attachments when there are no photos', async () => {
   const p = core.buildEmailPayload({ from: 'a@b.co', to: ['m@x.co'], subject: 's', text: 't', attachments: [] });
   assert.ok(!('attachments' in p) && !('reply_to' in p));

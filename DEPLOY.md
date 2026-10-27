@@ -88,6 +88,8 @@ Emails are sent only when `RESEND_API_KEY` and `NOTIFY_FROM` are set.
 | `NOTIFY_TO` | Who gets new-booking emails. Optional: defaults to `notifyEmail` in `business.config.json` (mikefreeman@lyknu.com). Comma-separate for several. |
 | `NOTIFY_CUSTOMER` | `true` to also email the customer a confirmation (optional) |
 
+**What Mike's email contains, in order:** confirmation #, When, Name, Phone, Email, Vehicle, Insurance, the customer's Description, then the Photos line (and backup links) last. It is plain text.
+
 **Photos in the email:** each customer photo (up to 4, 1.5 MB each, 20 MB cap overall) is attached to Mike's notification as `damage-<id>-N.jpg`, and the email also lists a link per photo. Those links are signed with `ADMIN_PASSWORD` + `SESSION_SECRET`, work for 30 days, and show only that one photo; changing either secret invalidates old links. The photos stay viewable any time in `/admin/` under the appointment.
 
 ---
