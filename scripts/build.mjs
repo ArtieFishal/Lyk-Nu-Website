@@ -52,10 +52,12 @@ const reviewsHtml = (cfg.reviews || []).filter((x) => x.text && !isTodo(x.text))
         <figure class="review"><div class="stars" aria-label="${x.rating || 5} out of 5 stars">${stars(x.rating || 5)}</div>
           <blockquote>“${esc(x.text)}”</blockquote><figcaption>— ${esc(x.author || 'Customer')}${x.date ? ', ' + esc(x.date) : ''}</figcaption></figure>`).join('');
 const social = cfg.social || {};
+const ext = 'target="_blank" rel="noopener noreferrer"';
+const NEWTAB = '<span class="sr-only"> (opens in a new tab)</span>';
 const socialLinks = [
-  val(social.facebook) && `<a href="${esc(social.facebook)}" target="_blank" rel="noopener">Facebook</a>`,
-  val(social.google) && `<a href="${esc(social.google)}" target="_blank" rel="noopener">Google</a>`,
-  val(social.yelp) && `<a href="${esc(social.yelp)}" target="_blank" rel="noopener">Yelp</a>`,
+  val(social.facebook) && `<a href="${esc(social.facebook)}" ${ext} aria-label="${esc(cfg.name)} on Facebook (opens in a new tab)">${ICONS.fb}<span>Facebook</span></a>`,
+  val(social.google) && `<a href="${esc(social.google)}" ${ext}>Google${NEWTAB}</a>`,
+  val(social.yelp) && `<a href="${esc(social.yelp)}" ${ext}>Yelp${NEWTAB}</a>`,
 ].filter(Boolean);
 const email = val(cfg.email);
 // insurance partners may be plain names or { name, url }
@@ -115,7 +117,7 @@ const blocks = {
   RATING: showRating ? `<div class="rating-summary"><span class="big">${esc(r.value)}</span><div><div class="stars">${stars(r.value)}</div><div class="muted">${esc(r.count)} ${esc(r.source)} reviews${r.asOf ? ` (as of ${esc(r.asOf)})` : ''}</div></div></div>` : '',
   HERO_RATING: showRating ? `<div><strong>${esc(r.value)} <span class="stars" style="font-size:1.2rem">★</span></strong>${esc(r.count)} ${esc(r.source)} reviews</div>` : '',
   REVIEWS: reviewsHtml,
-  REVIEW_LINK: val(social.google) ? `<a href="${esc(social.google)}" target="_blank" rel="noopener">Read all reviews on Google →</a>` : '',
+  REVIEW_LINK: val(social.google) ? `<a href="${esc(social.google)}" ${ext}>Read all reviews on Google →</a>` : '',
   JSONLD: jsonld,
   CANONICAL: '', // set per page below
   SOCIAL_LINKS: socialLinks.length ? `<p class="social-links">${socialLinks.join('')}</p>` : '',
@@ -127,6 +129,7 @@ const blocks = {
   MAP_SRC: `https://maps.google.com/maps?q=${geo ? encodeURIComponent(geo) + '+(' + encodeURIComponent(cfg.name) + ')' : mapQuery}&z=15&output=embed`,
   DIRECTIONS: `https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`,
   SERVICE_AREA: esc((() => { const l = (cfg.serviceArea || []).filter((x) => !isTodo(x)); return l.length > 1 ? l.slice(0, -1).join(', ') + ' and ' + l.at(-1) : (l[0] || `${a.displayCity}, TN`); })()),
+  FB_DD: val(social.facebook) ? `<div><dt>Facebook</dt><dd><a href="${esc(social.facebook)}" ${ext}>Find us on Facebook${NEWTAB}</a></dd></div>` : '',
   EMAIL_DD: email ? `<div><dt>Email</dt><dd><a href="mailto:${esc(email)}">${esc(email)}</a></dd></div>` : '',
   EMAIL_LINE: email ? `<br><a href="mailto:${esc(email)}">${esc(email)}</a>` : '',
   FAX_LINE: val(cfg.fax) ? `<br>Fax: ${esc(cfg.fax)}` : '',

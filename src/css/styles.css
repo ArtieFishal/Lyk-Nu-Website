@@ -241,7 +241,7 @@ a.insurer-link:hover::after{opacity:1}
 .footer-logo{display:block;width:min(260px,70vw);height:auto}
 .footer-about p{margin-top:1rem}
 .social-links{display:flex;gap:.55rem;flex-wrap:wrap}
-.site-footer .social-links a{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:.35rem .9rem;font-weight:600;font-size:.9rem;transition:background .2s,border-color .2s}
+.site-footer .social-links a{display:inline-flex;align-items:center;gap:.45rem;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:.35rem .9rem;font-weight:600;font-size:.9rem;transition:background .2s,border-color .2s}
 .site-footer .social-links a:hover{background:rgba(255,255,255,.1);border-color:#fff;text-decoration:none}
 .footer-cta{margin-top:1rem}
 .footer-cta a{font-weight:700}
