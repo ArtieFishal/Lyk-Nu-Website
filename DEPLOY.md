@@ -67,6 +67,7 @@ The password is **never written in the website's code**. It lives only in Netlif
 ## Using the owner page
 Go to `https://YOUR-SITE/admin/` (there is deliberately **no link** to it on the public site, so bookmark it) and enter the password.
 * **Appointments:** upcoming estimate appointments, with the customer's phone, vehicle, damage description and photos. Use **Cancel** to free up a slot. Call the customer to let them know.
+* **Repairs:** the repair status tracker. See "Repair status tracker" below for the step-by-step.
 * **Block off time:** use this when you won't be at the shop: a whole day or a range of hours, for example "Out of town" or "Supplier meeting". Customers can't book those times. (This does not change the shop's posted hours.) There are quick buttons for "Block rest of today" and "Block tomorrow".
 * **My availability:** your *estimate availability windows* (the hours each day you're available to do estimates, with an optional break), estimate length (e.g. 20 min), how many cars per time slot, the minimum notice (e.g. 2 hours), and how far ahead people can book. Also a **Major holidays** section: the shop is closed on major holidays by default; tick "Open anyway" to take bookings on a particular one.
 
@@ -91,6 +92,22 @@ Emails are sent only when `RESEND_API_KEY` and `NOTIFY_FROM` are set.
 **What Mike's email contains, in order:** confirmation #, When, Name, Phone, Email, Vehicle, Insurance, the customer's Description, then the Photos line (and backup links) last. It is plain text.
 
 **Photos in the email:** each customer photo (up to 4, 1.5 MB each, 20 MB cap overall) is attached to Mike's notification as `damage-<id>-N.jpg`, and the email also lists a link per photo. Those links are signed with `ADMIN_PASSWORD` + `SESSION_SECRET`, work for 30 days, and show only that one photo; changing either secret invalidates old links. The photos stay viewable any time in `/admin/` under the appointment.
+
+---
+
+## Repair status tracker (customers check their repair online)
+Customers go to **`/status/`** ("Check repair status" in the menu and the footer), type their **work order number** and the **last 4 digits of the phone number you have on file**, and see a progress bar, the stage list, your note, an *estimated* completion date if you set one, and the update history. There are no photos. The page asks Google not to list it (`noindex`), but it is a normal, linked page.
+
+**How Mike or staff use it** (`/admin/` → **Repairs** tab):
+1. **+ Add a repair.** Enter the work order number (e.g. 8123), customer name, phone (the customer needs it to look up), optional email, Year/Make/Model, and the starting stage. A work order number can only be used once; you'll see "That work order number is already in the list" if you repeat one.
+2. **Update as the car moves.** Each repair card has a big **Advance to: …** button that moves it to the next stage (it asks you to confirm). **Open / edit** lets you pick any stage, write a short note for the customer (plain English; they read it), set an *estimated* completion date, and tick **Waiting on parts** (shows a badge to the customer).
+3. **Emails (optional).** If the repair has an email address, the box **Email customer about this update** is ticked by default; untick it for a quiet update. The email says the new stage and your note and links to the status page. It never contains the phone number. With no email on the repair, nothing is sent. No texts are sent.
+4. **When the customer takes the car,** open the repair at **Ready for pickup** and tap **Mark picked up**. It moves out of the active list (tick **Show picked-up** to see old ones; **Put back on the active list** undoes it). **Delete** removes a repair for good (for typos or test entries).
+5. Customers only see the first name and last initial (e.g. "Jane D."), the vehicle, the stage, your note, the estimate date and the history. Phone number and email are never shown.
+
+Stages, in order: Estimate → Waiting on insurance → Parts ordered → Disassembly → Body repair → Paint → Reassembly → Detail & QC → Ready for pickup.
+
+**Privacy and guessing protection.** Both the work order and the last 4 digits must match; any mismatch gets the same "we couldn't find that, please call us" message. Failed tries are limited over a 15-minute window: **20 per visitor IP** (`STATUS_IP_LIMIT`) and **8 per work order** (`STATUS_WO_LIMIT`), after which the page says to call the shop for a while (a locked repair unlocks by itself after 15 minutes). Change these in Netlify's environment variables if needed. Customer emails use the same `RESEND_API_KEY` / `NOTIFY_FROM` as booking notices (section above); without them the tracker works and simply doesn't email.
 
 ---
 

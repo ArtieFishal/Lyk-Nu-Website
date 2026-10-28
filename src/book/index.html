@@ -51,12 +51,8 @@
             </div>
             <div class="f full"><label for="insurance">Insurance company <span class="opt">(optional — if filing a claim)</span></label><select id="insurance" name="insurance" autocomplete="off"><option value="">Select (optional)</option>{{INSURANCE_OPTIONS}}<option value="__other">Other (type it in)</option><option value="Paying out of pocket / not sure">Paying out of pocket / not sure</option></select><input class="other-input" id="insuranceOther" name="insuranceOther" placeholder="Type your insurance company" autocomplete="off" autocapitalize="words" aria-label="Insurance company (type it in)" hidden><div class="err"></div></div>
             <div class="f full"><label for="description">What happened? Describe the damage or problem</label>
-              <div class="dictate" id="dictate" hidden>
-                <button type="button" class="mic-btn" id="mic-btn" aria-pressed="false" aria-label="Start voice typing. Tap the mic and tell us what happened."><span class="mic-ic">{{i:mic}}</span><span class="mic-text" id="mic-text">Tap the mic and tell us what happened</span></button>
-                <p class="mic-status" id="mic-status" role="status" aria-live="polite"></p>
-              </div>
-              <textarea id="description" name="description" required maxlength="2000" placeholder="e.g. Rear-ended at a stop light. Rear bumper pushed in, trunk won't close."></textarea><div class="err"></div>
-              <p class="muted fine-print mic-privacy" id="mic-privacy" hidden>You can also just type. Voice is turned into text by your phone's or browser's own speech service (Apple or Google, depending on your device); we only receive the text you submit.</p></div>
+              <textarea id="description" aria-describedby="description-hint" name="description" required maxlength="2000" placeholder="e.g. Rear-ended at a stop light. Rear bumper pushed in, trunk won't close."></textarea><div class="err"></div>
+              <p class="muted fine-print" id="description-hint">Tap the microphone on your phone's keyboard to describe the damage by voice, or just type it.</p></div>
             <div class="f full">
               <label>Photos of the damage <span class="opt">(optional, up to 4)</span></label>
               <label class="drop" for="photos">{{i:camera}}<br><strong>Tap to add photos</strong><br><span class="muted">They help us prepare for your visit</span></label>

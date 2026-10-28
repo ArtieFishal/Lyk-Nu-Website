@@ -24,6 +24,7 @@
   <div id="app" hidden>
     <div class="tabs" role="tablist">
       <button class="active" data-tab="appts">Appointments</button>
+      <button data-tab="repairs">Repairs</button>
       <button data-tab="blocks">Block off time</button>
       <button data-tab="hours">My availability</button>
     </div>
@@ -90,8 +91,59 @@
         <p class="muted fine-print">Times are shop time (<span id="tz"></span>). Changing the estimate length doesn't move existing appointments.</p>
       </form>
     </section>
+
+    <section class="tab" id="tab-repairs">
+      <div id="rep-list-view">
+        <div class="row row-between">
+          <h2 class="m0">Customer repairs</h2>
+          <button type="button" class="btn btn-red btn-lg" id="rep-new">+ Add a repair</button>
+        </div>
+        <p class="muted">Customers look these up on the website's <strong>Repair Status</strong> page with their work order number and the last 4 digits of their phone.</p>
+        <div class="row rep-tools">
+          <div class="f"><label for="rep-q">Search</label><input id="rep-q" type="search" placeholder="Work order # or name" autocomplete="off"></div>
+          <label class="toggle"><input type="checkbox" id="rep-archived"> Show picked-up</label>
+        </div>
+        <div id="rep-list"></div>
+      </div>
+
+      <form class="panel" id="rep-form" hidden novalidate>
+        <h2 id="rep-form-title">Add a repair</h2>
+        <div id="rep-form-error" class="alert error" role="alert" hidden></div>
+        <div class="form-grid">
+          <div class="f"><label for="rep-wo">Work order #</label><input id="rep-wo" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="off" required><div class="err"></div></div>
+          <div class="f"><label for="rep-name">Customer name</label><input id="rep-name" autocomplete="off" required><div class="err"></div></div>
+          <div class="f"><label for="rep-phone">Phone <span class="opt">(customer uses the last 4 digits to look up)</span></label><input id="rep-phone" type="tel" inputmode="tel" autocomplete="off" required><div class="err"></div></div>
+          <div class="f"><label for="rep-email">Email <span class="opt">(optional, for update emails)</span></label><input id="rep-email" type="email" autocomplete="off"><div class="err"></div></div>
+          <div class="three">
+            <div class="f"><label for="rv-year">Year</label><select id="rv-year" autocomplete="off"><option value="">Select year</option></select><div class="err"></div></div>
+            <div class="f"><label for="rv-make">Make</label><select id="rv-make" autocomplete="off"><option value="">Select make</option></select><input class="other-input" id="rv-make-o" placeholder="Type the make" hidden><div class="err"></div></div>
+            <div class="f"><label for="rv-model">Model</label><select id="rv-model" autocomplete="off" disabled><option value="">Select make first</option></select><input class="other-input" id="rv-model-o" placeholder="Type the model" hidden><div class="err"></div></div>
+          </div>
+          <div class="f full"><label for="rep-stage">Stage</label><select id="rep-stage" autocomplete="off"></select><div class="err"></div></div>
+          <div class="f full"><label for="rep-note">Note for the customer <span class="opt">(optional, plain English; they can read this)</span></label><textarea id="rep-note" maxlength="600" placeholder="e.g. Waiting on the bumper from the supplier, should arrive Thursday."></textarea><div class="err"></div></div>
+          <div class="f"><label for="rep-est">Estimated completion <span class="opt">(optional)</span></label><input id="rep-est" type="date"><div class="err"></div></div>
+          <div class="f rep-checks">
+            <label class="toggle rep-big"><input type="checkbox" id="rep-parts"> Waiting on parts</label>
+            <label class="toggle rep-big" id="rep-notify-wrap"><input type="checkbox" id="rep-notify"> Email customer about this update <span class="opt" id="rep-notify-hint"></span></label>
+          </div>
+        </div>
+        <div class="form-actions rep-actions">
+          <button class="btn btn-red btn-lg" type="submit" id="rep-save">Save</button>
+          <button class="btn btn-outline btn-lg" type="button" id="rep-advance" hidden>Advance to next stage</button>
+          <button class="btn btn-outline btn-lg" type="button" id="rep-pickup" hidden>Mark picked up</button>
+          <button class="btn btn-outline btn-lg" type="button" id="rep-restore" hidden>Put back on the active list</button>
+          <button class="btn btn-outline btn-lg" type="button" id="rep-cancel">Back to list</button>
+          <button class="btn btn-outline btn-lg rep-danger" type="button" id="rep-delete" hidden>Delete</button>
+        </div>
+        <div id="rep-history-box" hidden>
+          <h3 class="status-h3">Stage history</h3>
+          <ul class="timeline" id="rep-history"></ul>
+        </div>
+      </form>
+    </section>
   </div>
 </main>
+<script src="/js/vehicles.js?v={{BUILD}}" defer></script>
 <script src="/js/admin.js?v={{BUILD}}" defer></script>
 </body>
 </html>

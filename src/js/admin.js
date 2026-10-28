@@ -20,7 +20,7 @@
     });
     if (r.status === 401 && path !== 'login') { logout(); throw new Error('Session expired — please log in again.'); }
     const data = r.headers.get('content-type')?.includes('json') ? await r.json() : r;
-    if (!r.ok) throw new Error(data.error || 'Request failed');
+    if (!r.ok) { const e = new Error(data.error || 'Request failed'); e.fields = data.fields; throw e; }
     return data;
   }
 
@@ -167,9 +167,179 @@
     } catch (x) { toast(x.message); }
   });
 
+  // ---------- repairs (customer status tracker) ----------
+  const OTHER = '__other';
+  const R = { editing: null, repair: null, stages: [], byWo: {} };
+  const fmtWhen = (iso) => new Date(iso).toLocaleString('en-US', { timeZone: 'America/New_York', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const addOpt = (sel, value, label) => { const o = document.createElement('option'); o.value = value; o.textContent = label ?? value; sel.appendChild(o); };
+  const resetSel = (sel, placeholder) => { sel.innerHTML = ''; addOpt(sel, '', placeholder); };
+  function toggleOther(sel, input, force) { const on = force || sel.value === OTHER; input.hidden = !on; if (!on) input.value = ''; return on; }
+  const vData = window.LYKNU_VEHICLES || {};
+  function buildModels() {
+    const make = $('rv-make'), model = $('rv-model');
+    if (!make.value) { resetSel(model, 'Select make first'); model.disabled = true; toggleOther(model, $('rv-model-o'), false); return; }
+    if (make.value === OTHER) { resetSel(model, 'Other (type it in)'); addOpt(model, OTHER, 'Other (type it in)'); model.value = OTHER; model.disabled = true; toggleOther(model, $('rv-model-o'), true); return; }
+    resetSel(model, 'Select model'); (vData[make.value] || []).forEach((v) => addOpt(model, v));
+    addOpt(model, OTHER, 'Other (type it in)'); model.disabled = false; toggleOther(model, $('rv-model-o'), false);
+  }
+  (function initVehicleSelects() {
+    for (let y = new Date().getFullYear() + 1; y >= 1980; y--) addOpt($('rv-year'), y);
+    Object.keys(vData).forEach((m) => addOpt($('rv-make'), m));
+    addOpt($('rv-make'), OTHER, 'Other (type it in)');
+    $('rv-make').addEventListener('change', () => { const on = toggleOther($('rv-make'), $('rv-make-o')); buildModels(); if (on) $('rv-make-o').focus(); });
+    $('rv-model').addEventListener('change', () => { if (toggleOther($('rv-model'), $('rv-model-o'))) $('rv-model-o').focus(); });
+  })();
+  const pickedVal = (selId, otherId) => ($(selId).value === OTHER ? $(otherId).value.trim() : $(selId).value.trim());
+  function setVehicle(year, make, model) {
+    const ys = $('rv-year');
+    if (year && ![...ys.options].some((o) => o.value === String(year))) addOpt(ys, year);
+    ys.value = year || '';
+    const known = make && Object.prototype.hasOwnProperty.call(vData, make);
+    $('rv-make').value = !make ? '' : known ? make : OTHER;
+    toggleOther($('rv-make'), $('rv-make-o'), !!make && !known); $('rv-make-o').value = make && !known ? make : '';
+    buildModels();
+    if (make && known) {
+      const hit = (vData[make] || []).includes(model);
+      $('rv-model').value = !model ? '' : hit ? model : OTHER;
+      toggleOther($('rv-model'), $('rv-model-o'), !!model && !hit); $('rv-model-o').value = model && !hit ? model : '';
+    } else if (make) $('rv-model-o').value = model || '';
+  }
+
+  const FIELD_IDS = { workOrder: 'rep-wo', name: 'rep-name', phone: 'rep-phone', email: 'rep-email', vehicleYear: 'rv-year', vehicleMake: 'rv-make', vehicleModel: 'rv-model', stage: 'rep-stage', estimatedCompletion: 'rep-est', note: 'rep-note' };
+  function clearFieldErrors() {
+    $('rep-form-error').hidden = true;
+    document.querySelectorAll('#rep-form .f.invalid').forEach((f) => { f.classList.remove('invalid'); f.querySelector('.err').textContent = ''; });
+  }
+  function showFieldErrors(e) {
+    const box = $('rep-form-error'); box.textContent = e.message; box.hidden = false;
+    let first = null;
+    Object.entries(e.fields || {}).forEach(([k, msg]) => {
+      const inp = $(FIELD_IDS[k]); if (!inp) return;
+      const f = inp.closest('.f'); f.classList.add('invalid'); f.querySelector('.err').textContent = msg; first = first || inp;
+    });
+    (first || box).scrollIntoView({ block: 'center', behavior: 'smooth' }); if (first) first.focus({ preventScroll: true });
+  }
+  const emailNote = (res) => (res.emailed === 'sent' ? ' Customer emailed.' : res.emailed === 'skipped' ? ' (Email is not set up on the site yet, so nothing was emailed.)' : res.emailed === 'failed' ? ' (The email could not be sent.)' : '');
+
+  function showList() { $('rep-form').hidden = true; $('rep-list-view').hidden = false; R.editing = null; loadRepairs(); }
+  function updateNotifyBox() {
+    const has = !!$('rep-email').value.trim();
+    $('rep-notify').disabled = !has;
+    $('rep-notify-hint').textContent = has ? '(sent when the stage changes)' : '(no email on file)';
+    if (!has) $('rep-notify').checked = false;
+  }
+  $('rep-email').addEventListener('input', () => { const had = !$('rep-notify').disabled; updateNotifyBox(); if (!had && $('rep-email').value.trim()) $('rep-notify').checked = true; });
+  function openForm(repair) {
+    clearFieldErrors();
+    R.repair = repair || null; R.editing = repair ? repair.workOrder : null;
+    $('rep-list-view').hidden = true; $('rep-form').hidden = false;
+    $('rep-form-title').textContent = repair ? `Work order #${repair.workOrder}` : 'Add a repair';
+    const sel = $('rep-stage'); sel.innerHTML = ''; R.stages.forEach((s) => addOpt(sel, s.id, s.label));
+    $('rep-wo').value = repair ? repair.workOrder : ''; $('rep-wo').readOnly = !!repair;
+    $('rep-name').value = repair?.name || ''; $('rep-phone').value = repair?.phone || ''; $('rep-email').value = repair?.email || '';
+    setVehicle(repair?.vehicleYear, repair?.vehicleMake, repair?.vehicleModel);
+    sel.value = repair?.stage || 'estimate';
+    $('rep-note').value = repair?.note || ''; $('rep-est').value = repair?.estimatedCompletion || ''; $('rep-parts').checked = !!repair?.waitingOnParts;
+    updateNotifyBox(); $('rep-notify').checked = !!repair?.email;
+    const done = !!repair?.archived, ready = repair?.stage === 'ready';
+    $('rep-advance').hidden = !repair || done || !repair.nextStage;
+    if (repair?.nextStage) $('rep-advance').textContent = 'Advance to: ' + (R.stages.find((s) => s.id === repair.nextStage)?.label || '');
+    $('rep-pickup').hidden = !repair || done || !ready;
+    $('rep-restore').hidden = !repair || !done;
+    $('rep-delete').hidden = !repair;
+    $('rep-save').textContent = repair ? 'Save changes' : 'Add repair';
+    $('rep-history-box').hidden = !repair;
+    const h = $('rep-history'); h.innerHTML = '';
+    (repair?.history || []).slice().reverse().forEach((x) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${esc(x.stage === 'picked-up' ? 'Picked up' : (R.stages.find((s) => s.id === x.stage)?.label || x.stage))}</strong><span class="muted">${esc(fmtWhen(x.at))}</span>`;
+      h.appendChild(li);
+    });
+    window.scrollTo({ top: 0 });
+    (repair ? $('rep-stage') : $('rep-wo')).focus({ preventScroll: true });
+  }
+  function formBody() {
+    const b = {
+      name: $('rep-name').value, phone: $('rep-phone').value, email: $('rep-email').value,
+      vehicleYear: $('rv-year').value, vehicleMake: pickedVal('rv-make', 'rv-make-o'), vehicleModel: pickedVal('rv-model', 'rv-model-o'),
+      stage: $('rep-stage').value, note: $('rep-note').value, estimatedCompletion: $('rep-est').value, waitingOnParts: $('rep-parts').checked,
+    };
+    if (!R.editing) b.workOrder = $('rep-wo').value.trim(); else b.notify = $('rep-notify').checked;
+    return b;
+  }
+  async function saveRepair() {
+    clearFieldErrors();
+    const btn = $('rep-save'); btn.disabled = true;
+    try {
+      const editing = !!R.editing;
+      const opts = { method: editing ? 'PUT' : 'POST', body: JSON.stringify(formBody()) };
+      const res = await api(editing ? 'repairs/' + R.editing : 'repairs', opts);
+      toast((editing ? 'Saved.' : `Added work order #${res.repair.workOrder}.`) + emailNote(res));
+      showList();
+    } catch (x) { showFieldErrors(x); } finally { btn.disabled = false; }
+  }
+  $('rep-form').addEventListener('submit', (e) => { e.preventDefault(); saveRepair(); });
+  $('rep-advance').addEventListener('click', () => { if (R.repair?.nextStage) { $('rep-stage').value = R.repair.nextStage; saveRepair(); } });
+  $('rep-cancel').addEventListener('click', showList);
+  $('rep-new').addEventListener('click', () => openForm(null));
+  async function repAction(path, method, msg) {
+    try { await api(path, { method }); toast(msg); showList(); } catch (x) { toast(x.message); }
+  }
+  function repOk(q) { return window.confirm(q); }
+  function repPick() {
+    if (!repOk('Mark work order ' + R.editing + ' as collected by the customer?')) return;
+    repAction('repairs/' + R.editing + '/pickup', 'POST', 'Done.');
+  }
+  function repBack() { repAction('repairs/' + R.editing + '/restore', 'POST', 'Back on the active list.'); }
+  function repDel() {
+    if (!repOk('Remove work order ' + R.editing + '? The customer will no longer be able to look it up.')) return;
+    repAction('repairs/' + R.editing, 'DELETE', 'Removed.');
+  }
+  $('rep-pickup').addEventListener('click', repPick);
+  $('rep-restore').addEventListener('click', repBack);
+  $('rep-delete').addEventListener('click', repDel);
+
+  function repCard(r) {
+    const next = r.nextStage ? (R.stages.find((s) => s.id === r.nextStage)?.label || '') : '';
+    const div = document.createElement('div'); div.className = 'appt rep-card' + (r.archived ? ' is-done' : '');
+    div.innerHTML = `<div class="rep-head"><strong class="rep-wo">#${esc(r.workOrder)}</strong><span class="rep-name">${esc(r.name)}</span></div>
+      <div class="rep-veh">${esc(r.vehicle)}</div>
+      <div class="rep-meta"><span class="chip chip-stage">${esc(r.archived ? 'Picked up' : r.stageLabel)}</span>${r.waitingOnParts ? '<span class="badge-parts">Waiting on parts</span>' : ''}<span class="muted">Updated ${esc(fmtWhen(r.updatedAt))}</span></div>
+      <div class="rep-btns"></div>`;
+    const btns = div.querySelector('.rep-btns');
+    const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'btn btn-outline btn-lg'; edit.textContent = 'Open / edit';
+    edit.addEventListener('click', () => openForm(r)); btns.appendChild(edit);
+    if (!r.archived && next) {
+      const adv = document.createElement('button'); adv.type = 'button'; adv.className = 'btn btn-red btn-lg'; adv.textContent = 'Advance to: ' + next;
+      adv.addEventListener('click', () => advanceFromList(r, next)); btns.appendChild(adv);
+    }
+    return div;
+  }
+  async function advanceFromList(r, next) {
+    const mail = r.email ? ` ${r.name.split(' ')[0]} will be emailed about it.` : '';
+    if (!window.confirm(`Move work order ${r.workOrder} to "${next}"?${mail}`)) return;
+    try { const res = await api(`repairs/${r.workOrder}/advance`, { method: 'POST', body: JSON.stringify({ notify: !!r.email }) }); toast(`Now at: ${next}.` + emailNote(res)); loadRepairs(); }
+    catch (x) { toast(x.message); }
+  }
+  async function loadRepairs() {
+    const box = $('rep-list');
+    try {
+      const qs = new URLSearchParams({ q: $('rep-q').value.trim(), archived: $('rep-archived').checked ? '1' : '0' });
+      const data = await api('repairs?' + qs);
+      R.stages = data.stages;
+      box.innerHTML = '';
+      if (!data.repairs.length) { box.innerHTML = `<p class="muted rep-empty">${$('rep-q').value.trim() ? 'No repairs match that search.' : 'No active repairs yet. Tap "+ Add a repair" when a new work order comes in.'}</p>`; return; }
+      data.repairs.forEach((r) => box.appendChild(repCard(r)));
+    } catch (x) { box.innerHTML = `<div class="alert error">${esc(x.message)}</div>`; }
+  }
+  let repTimer;
+  $('rep-q').addEventListener('input', () => { clearTimeout(repTimer); repTimer = setTimeout(loadRepairs, 250); });
+  $('rep-archived').addEventListener('change', loadRepairs);
+  document.querySelector('.tabs [data-tab="repairs"]').addEventListener('click', showList);
+
   async function start() {
     showApp(true);
-    try { await loadSettings(); await Promise.all([loadAppts(), loadBlocks()]); }
+    try { await loadSettings(); await Promise.all([loadAppts(), loadBlocks(), loadRepairs()]); }
     catch (x) { if (token) toast(x.message); }
   }
   if (token) start(); else showApp(false);
