@@ -234,7 +234,7 @@ a.insurer-link:hover::after{opacity:1}
 .site-footer{background:var(--navy-d);color:#b4c0d3;padding:3rem 0 1.6rem;font-size:.95rem;position:relative}
 .site-footer::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
 .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.2rem}
-.site-footer h4{color:#fff;font-family:var(--display);text-transform:uppercase;font-size:1.25rem;margin:0 0 .8rem;letter-spacing:.5px}
+.site-footer h2{color:#fff;font-weight:700;line-height:inherit;font-family:var(--display);text-transform:uppercase;font-size:1.25rem;margin:0 0 .8rem;letter-spacing:.5px}
 .site-footer a{color:#e5ebf4;text-decoration:none}
 .site-footer a:hover{color:#fff;text-decoration:underline}
 .footer-logo-plate{display:inline-block;background:#fff;border-radius:14px;padding:.8rem 1rem;box-shadow:0 10px 24px -10px rgba(0,0,0,.6)}
