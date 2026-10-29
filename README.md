@@ -12,10 +12,9 @@ A static website with a built-in online estimate scheduler, running on Netlify (
 |---|---|
 | `business.config.json` | **All the business facts** (phone, address, hours text, reviews, services). Edit this one file to change the text on the site. |
 | `src/` | Page templates, CSS, JavaScript and web-sized images (`src/assets/img/`) |
-| `netlify/functions/` | The backend (availability, booking, owner admin, public repair status lookup) |
-| `netlify/lib/` | Shared logic: `core.mjs` (booking, email), `repairs.mjs` + `repairs-admin.mjs` (repair tracker) |
+| `netlify/functions/` | The booking backend (availability, booking, owner admin) |
 | `scripts/build.mjs` | Builds `src/` into `public/`, the folder Netlify publishes |
-| `tests/` | Automated tests (booking API, repair tracker API, browser tests) and `tests/local/` (a no-Netlify local test server) |
+| `tests/` | Automated tests for the booking system |
 | `images/` | Franklyn's original full-size shop photos (kept as-is; the site uses the optimized copies in `src/assets/img/`) |
 | `original-draft/` | Franklyn's first single-page draft (`index.html`), kept for reference. It isn't used by the new site. |
 
@@ -35,23 +34,14 @@ The shop's *posted* hours (Mon–Fri 8–5) are text in that file. The hours cus
 * **Voice dictation:** under "What happened?" the description is a plain textarea, so the phone's own keyboard microphone works (iPhone and Android). The helper text tells customers to tap the keyboard mic or just type. There is no custom mic button or browser speech code, and the site sends a `microphone=()` Permissions-Policy because it never needs mic access. Don't add `autocomplete="off"` or an `inputmode` to that textarea, since either can hide the keyboard's mic.
 * Optional email notices go through [Resend](https://resend.com) (see DEPLOY.md). Without it, appointments still show up on `/admin/`.
 
-## Repair status tracker
-Customers check `/status/` ("Check repair status" in the nav and footer) with their **work order number** (we're in the 8000s) and the **last 4 digits of the phone on file**. Staff manage repairs in `/admin/` → **Repairs** (add, edit stage/note/estimated date/"waiting on parts", **Advance**, mark picked up, delete). Full staff instructions are in DEPLOY.md ("Repair status tracker").
-* **Stages:** Estimate, Waiting on insurance, Parts ordered, Disassembly, Body repair, Paint, Reassembly, Detail & QC, Ready for pickup (edit the list in `netlify/lib/repairs.mjs`, `STAGES`). No photos; no SMS. Email is optional via Resend (same `RESEND_API_KEY`/`NOTIFY_FROM` as bookings); the email never includes the phone number and a failed/missing email never blocks an update.
-* **Data:** records live in the `lyknu-booking` Netlify Blobs store under `repairs/<work order>` (one record: name, phone, optional email, vehicle, stage, note, estimate, waiting flag, status history). The public API (`POST /api/status`) returns only first name + last initial, vehicle, stage, note, estimate, history and the shop phone; phone and email never leave the server. Work order numbers are unique (409 on a duplicate).
-* **Lookup safety:** work order and last 4 are compared in constant time; an unknown work order and a wrong last 4 give the identical 404 ("we couldn't find that, please call us") after the same short delay. Failed lookups only are counted in a 15-minute window: `STATUS_IP_LIMIT` (default 20) per hashed client IP and `STATUS_WO_LIMIT` (default 8) per work order, then HTTP 429 with `Retry-After: 900`. Counters are Blobs entries (`throttle/ip/<sha256>`, `throttle/wo/<wo>`) and stay in the store after the window; they are harmless and can be deleted. The client IP is taken from Netlify's `x-nf-client-connection-ip`.
-* **Page:** `src/status/index.html` + `src/js/status.js` (renders with `textContent` only), `<meta name="robots" content="noindex">`, listed in `sitemap.xml` when `SITE_URL` is set.
-
 ## Developer notes
 ```
 npm install
 export ADMIN_PASSWORD=choose-one SESSION_SECRET=random-string
 npm run dev            # builds src/ -> public/ and runs netlify dev on :8888
-ADMIN_PASSWORD=choose-one BASE=http://localhost:8888 npm test   # end-to-end API tests (booking + repair tracker)
+ADMIN_PASSWORD=choose-one BASE=http://localhost:8888 npm test   # end-to-end API tests
 # Without the Netlify CLI: the same functions on an in-memory Blobs stub, plus static public/ (state resets on restart)
 ADMIN_PASSWORD=choose-one SESSION_SECRET=x npm run dev:local     # :8888
-# Browser tests (need playwright-core; PLAYWRIGHT_CORE=/path/to/node_modules/playwright-core CHROME=/path/to/chrome):
-ADMIN_PASSWORD=choose-one node tests/ui.test.mjs; ADMIN_PASSWORD=choose-one node tests/ui-repairs.test.mjs
 ```
 * `src/` holds templates (`{{config.x}}`, `{{> partial}}`, `{{i:icon}}`); `scripts/build.mjs` renders them into `public/`.
 * `netlify/functions/`: `availability.mjs`, `book.mjs`, `admin.mjs`; shared logic is in `netlify/lib/core.mjs`.

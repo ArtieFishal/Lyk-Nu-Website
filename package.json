@@ -7,8 +7,8 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "npm run build && netlify dev",
-    "test": "node tests/api.test.mjs && node tests/repairs.test.mjs",
-    "dev:local": "npm run build && node tests/local/serve.mjs"
+    "dev:local": "npm run build && node tests/local/serve.mjs",
+    "test": "node tests/api.test.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^11.0.0"

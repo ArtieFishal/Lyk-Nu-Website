@@ -3,7 +3,6 @@ import {
   json, isDate, upcomingHolidays, isTime, toMin, shopNow, addDays, store, uploadStore, getSettings, getBlocks, getDay,
   casUpdate, sanitizeSettings, DEFAULT_SETTINGS, checkPassword, makeToken, verifyToken, TZ,
 } from '../lib/core.mjs';
-import { repairsRoute } from '../lib/repairs-admin.mjs';
 
 const body = async (req) => { try { return await req.json(); } catch { return {}; } };
 
@@ -26,9 +25,6 @@ export default async (req) => {
   }
 
   if (!verifyToken(req)) return json({ error: 'Please log in.' }, 401);
-
-  // ----- repairs -----
-  if (route === 'repairs' || route.startsWith('repairs/')) return repairsRoute(req, route, url);
 
   // ----- settings -----
   if (route === 'settings' && m === 'GET') { const today = shopNow().date; return json({ settings: await getSettings(), timezone: TZ, today, holidays: upcomingHolidays(today, 8) }); }
