@@ -17,15 +17,13 @@ Franklyn supplied these photos (originals are in the `images/` folder of the Git
 | `images/photo7.jpg` | Lyk-Nu wrecker in front of the shop building | Not currently used on the site (gallery removed) |
 | `paint-booth-interior.jpg` (added later; replaced the closed-doors booth photo) | Inside the downdraft paint booth: side lighting and floor grates | Home "Paint department" feature (`paint-booth-interior`) |
 | `paint-mixing-room.jpg` (added later) | Paint mixing room with PPG Envirobase shelves | Home "Paint department" feature (`paint-mixing-room`) |
+| `alignment-lift.jpg` (added later; replaced the stock mechanic photo) | Blue two-post lift with a John Bean Visualiner alignment machine behind it and a white truck on the lift | "Mechanical Repair" card, left half of the photo pair (`alignment-lift`) |
+| `tire-changer-balancer.jpg` (added later) | Coats Maxx tire changer and Hunter wheel balancer (web version cropped to portrait around both machines) | "Mechanical Repair" card, right half of the photo pair (`tire-changer-balancer`) |
 
 The "Our Work" gallery was removed because its photos repeated the service-card photos; the gallery image files were deleted from the project (still in git history).
 
-## Stock photo (still used where no shop photo fits)
-| File | Used for | Source | License |
-|---|---|---|---|
-| `mechanical-repair` | "Mechanical Repair" card | https://unsplash.com/photos/nkdv9cqz9VE (photographer @ilhamrahmat) | [Unsplash License](https://unsplash.com/license): free for commercial use, no attribution required |
-
-If the shop has a photo of mechanical work (a car on a lift, engine work), replace `src/assets/img/mechanical-repair.webp` and `-sm.webp` with it. The site will then use no stock images at all.
+## Stock photos
+None. The last stock photo (the Unsplash engine-bay picture on the "Mechanical Repair" card) was replaced with the shop's own photos and its files were deleted.
 
 ## Logo
 The Lyk-Nu logo is the shop's own artwork, supplied by the shop owner's team (originals in the repo: `images/logo-originals/Lyk-Nu Logo.png` = "LYK-NU" wordmark, `images/logo-originals/Lyk-Nu Full Logo.png` = wordmark plus "AUTO COLLISION & SERVICE CENTER" tagline). Nothing about the artwork was redrawn; it was only given a transparent background and resized.
