@@ -9,7 +9,7 @@ Franklyn supplied these photos (originals are in the `images/` folder of the Git
 | Original | What it shows | Where it's used on the site |
 |---|---|---|
 | `images/photo5.jpg` | Candy-red lifted Ford Excursion in the shop bay | Home hero (`hero-shop`), social share image (`og-image.jpg`) |
-| `images/photo2.jpg` | Red/silver Chevy pickup with the front end torn down and the cab masked for paint | "Collision Repair" card (`collision-damage`) |
+| `images/photo2.jpg` | Red/silver Chevy pickup with the front end torn down and the cab masked for paint | Not currently used on the site (replaced on the "Collision Repair" card by the Ford sedan photo) |
 | `images/photo1.jpg` | Same Chevy finished, side view outdoors | Not currently used on the site (the "Our Work" gallery was removed to avoid repeating photos) |
 | `images/photo3.jpg` | Same Chevy finished, front three-quarter view | "Auto Body & Paint" card (`body-paint-work`) |
 | `images/photo4.jpg` | Wide view of the shop floor with the Chevy in for repair | "About" section (`shop-floor`) |
@@ -19,6 +19,7 @@ Franklyn supplied these photos (originals are in the `images/` folder of the Git
 | `paint-mixing-room.jpg` (added later) | Paint mixing room with PPG Envirobase shelves | Home "Paint department" feature (`paint-mixing-room`) |
 | `alignment-lift.jpg` (added later; replaced the stock mechanic photo) | Blue two-post lift with a John Bean Visualiner alignment machine behind it and a white truck on the lift | "Mechanical Repair" card, left half of the photo pair (`alignment-lift`) |
 | `tire-changer-balancer.jpg` (added later) | Coats Maxx tire changer and Hunter wheel balancer (web version cropped to portrait around both machines) | "Mechanical Repair" card, right half of the photo pair (`tire-changer-balancer`) |
+| `collision-repair-ford.jpg` (added later; replaced the Chevy pickup photo) | Dark gray Ford sedan mid-repair: rear quarter panel in white primer with green masking tape, rear bumper off, trunk open (web version cropped to landscape around the repair area) | "Collision Repair" card (`collision-repair-ford`) |
 
 The "Our Work" gallery was removed because its photos repeated the service-card photos; the gallery image files were deleted from the project (still in git history).
 
