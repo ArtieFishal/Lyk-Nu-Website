@@ -15,7 +15,7 @@ Franklyn supplied these photos (originals are in the `images/` folder of the Git
 | `images/photo4.jpg` | Wide view of the shop floor with the Chevy in for repair | "About" section (`shop-floor`) |
 | `images/photo6.jpg` | Lyk-Nu rollback tow truck (USDOT 624512 on the bed) | "Towing & Road Service" card (`towing-flatbed`) |
 | `images/photo7.jpg` | Lyk-Nu wrecker in front of the shop building | Not currently used on the site (gallery removed) |
-| `paint-booth.jpg` (added later) | Paint booth in the shop, with PPG / Envirobase stickers | Home "Paint department" feature (`paint-booth`) |
+| `paint-booth-interior.jpg` (added later; replaced the closed-doors booth photo) | Inside the downdraft paint booth: side lighting and floor grates | Home "Paint department" feature (`paint-booth-interior`) |
 | `paint-mixing-room.jpg` (added later) | Paint mixing room with PPG Envirobase shelves | Home "Paint department" feature (`paint-mixing-room`) |
 
 The "Our Work" gallery was removed because its photos repeated the service-card photos; the gallery image files were deleted from the project (still in git history).
